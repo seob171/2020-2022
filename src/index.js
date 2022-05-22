@@ -1,15 +1,15 @@
-import router from './router.js'
+import router from './router.js';
 
 window.onload = () => {
-    document.body.addEventListener('click',(e)=>{
+    document.body.addEventListener('click', e => {
         // if(e.target.matches('data-link')){
-            e.preventDefault()
-            window.history.pushState(null,null, e.target.getAttribute('route'))
-            router()
+        e.preventDefault();
+        window.history.pushState(null, null, e.target.getAttribute('route'));
+        router();
         // }
-    })
-    window.addEventListener('popstate',()=>{
-        router()
-    })
-    router()
-}
+    });
+    window.addEventListener('popstate', () => {
+        router();
+    });
+    router();
+};

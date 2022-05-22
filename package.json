@@ -1,42 +1,43 @@
 {
-  "name": "zoom",
-  "version": "1.0.0",
-  "description": "줌 주니어 프론트엔드 과제",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --mode=production",
-    "start:dev": "webpack serve --mode=development",
-    "build": "webpack --mode=production",
-    "build:dev": "webpack --mode=development"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/seob171/zoom.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/seob171/zoom/issues"
-  },
-  "homepage": "https://github.com/seob171/zoom#readme",
-  "devDependencies": {
-    "@babel/core": "^7.18.0",
-    "@babel/plugin-transform-runtime": "^7.18.0",
-    "@babel/preset-env": "^7.18.0",
-    "babel-loader": "^8.2.5",
-    "css-loader": "^6.7.1",
-    "html-webpack-plugin": "^5.5.0",
-    "mini-css-extract-plugin": "^2.6.0",
-    "webpack": "^5.72.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0"
-  },
-  "dependencies": {
-    "@babel/runtime-corejs3": "^7.18.0",
-    "core-js": "^3.22.5",
-    "regenerator-runtime": "^0.13.9"
-  },
-  "type": "module"
+    "name": "zoom",
+    "version": "1.0.0",
+    "description": "줌 주니어 프론트엔드 과제",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "webpack serve --mode=production",
+        "start:dev": "webpack serve --mode=development",
+        "build": "webpack --mode=production",
+        "build:dev": "webpack --mode=development"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/seob171/zoom.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/seob171/zoom/issues"
+    },
+    "homepage": "https://github.com/seob171/zoom#readme",
+    "devDependencies": {
+        "@babel/core": "^7.18.0",
+        "@babel/plugin-transform-runtime": "^7.18.0",
+        "@babel/preset-env": "^7.18.0",
+        "babel-loader": "^8.2.5",
+        "css-loader": "^6.7.1",
+        "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.6.0",
+        "prettier": "^2.6.2",
+        "webpack": "^5.72.1",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.9.0"
+    },
+    "dependencies": {
+        "@babel/runtime-corejs3": "^7.18.0",
+        "core-js": "^3.22.5",
+        "regenerator-runtime": "^0.13.9"
+    },
+    "type": "module"
 }
