@@ -1,55 +1,40 @@
-import { $ } from "./util/util.js";
-
+import Home from "./pages/Home.js";
+import Posts from "./pages/Posts.js";
+import Settings from "./pages/Settings.js";
+import NotFound from "./pages/NotFound.js";
 import Components from "./core/Components.js";
+import { $ } from "./util/util.js";
+import Router from "./router";
+
+const CHANGE_ROUTE_EVENT = "locationChange";
 
 export default class App extends Components {
-  constructor(props) {
-    super(props); // 추후에 하위로 컴포넌트를 런더링 할 때 필요한 부분
-    this.initialState(); // 초기값 설정
-  }
-
   async initialState() {
-    this.setState({
-      count: 0,
-      diff: 1,
-    });
+    this.setState({});
   }
 
   template() {
     return `
-      <div class="container">
-        <h1>Counter</h1>
-        <form class="setDiffForm">
-            <input type="number" class="diffInput" value="${
-              this.state.diff || 1
-            }">
-            <button class="diffSubmit">diff 설정</button>
-        </form>
-        <h2 class="counter">${this.state.count}</h2>
-        <button class="increaseBtn">+1</button>
-        <button class="decreaseBtn">-1</button>
-      </div>
+      <h1>App</h1>
+      <nav>
+        <li data-navigate="/">home</li>
+        <li data-navigate="/posts">posts</li>
+        <li data-navigate="/setting">setting</li>
+      </nav>
+      <section class="home"></section>
+      <section class="posts"></section>
+      <section class="setting"></section>
+      <section class="notFound"></section>
     `;
   }
 
   componentDidMount() {
-    const { handleIncrease, handleDecrease, handleSubmit } = this;
-    $(".increaseBtn").addEventListener("click", handleIncrease.bind(this));
-    $(".decreaseBtn").addEventListener("click", handleDecrease.bind(this));
-    $(".setDiffForm").addEventListener("submit", handleSubmit.bind(this));
-  }
+    const router = new Router();
 
-  handleIncrease() {
-    this.setState({ ...this.state, count: this.state.count + this.state.diff });
-  }
-
-  handleDecrease() {
-    this.setState({ ...this.state, count: this.state.count - this.state.diff });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault;
-    const diff = parseInt($(".diffInput").value);
-    this.setState({ ...this.state, diff: diff });
+    router
+      .addRoute("/", new Home($(".home")))
+      .addRoute("/posts", new Posts($(".posts")))
+      .addRoute("/setting", new Settings($(".setting")))
+      .route();
   }
 }
