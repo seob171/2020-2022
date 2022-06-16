@@ -1,4 +1,4 @@
-import {$} from './util/util.js';
+import { $ } from './util/util.js';
 
 import App from './App.js';
 

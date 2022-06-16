@@ -1,12 +1,12 @@
 import Components from '../../core/Components.js';
 
 export default class Menu extends Components {
-	async initialState() {
-		this.setState({});
-	}
+  async initialState() {
+    this.setState({});
+  }
 
-	template() {
-		return `
+  template() {
+    return `
             <div class="menu_wrap">
                 <div class="inner">
                     <div class="category_menu">
@@ -41,7 +41,7 @@ export default class Menu extends Components {
 			</div>
        </div>
     `;
-	}
+  }
 
-	async componentDidMount() {}
+  async componentDidMount() {}
 }

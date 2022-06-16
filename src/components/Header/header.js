@@ -1,15 +1,15 @@
 import Components from '../../core/Components.js';
 import Menu from './menu';
-import {$} from '../../util/util';
+import { $ } from '../../util/util';
 // import styled from 'styled-components';
 
 export default class Header extends Components {
-	async initialState() {
-		this.setState({});
-	}
+  async initialState() {
+    this.setState({});
+  }
 
-	template() {
-		return `
+  template() {
+    return `
         <div id="header">
             <div class="header_wrap">
                 <div class="inner">
@@ -32,11 +32,11 @@ export default class Header extends Components {
             <div id="menu"></div>
         </div>
     `;
-	}
+  }
 
-	async componentDidMount() {
-		new Menu($('#menu'));
-	}
+  async componentDidMount() {
+    new Menu($('#menu'));
+  }
 }
 
 // const Input = styled.input`

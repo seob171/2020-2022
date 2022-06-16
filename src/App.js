@@ -1,7 +1,7 @@
-import Components from "./core/Components.js";
-import router from "./router.js";
-import { $ } from "./util/util.js";
-import Header from "./components/Header/header.js";
+import Components from './core/Components.js';
+import router from './router.js';
+import { $ } from './util/util.js';
+import Header from './components/Header/header.js';
 
 export default class App extends Components {
   constructor(props) {
@@ -25,8 +25,8 @@ export default class App extends Components {
   async componentDidMount() {
     window.onload = async () => {
       const view = await router();
-      new view($("#app"));
+      new view($('#app'));
     };
-    new Header($("#header"));
+    new Header($('#header'));
   }
 }
