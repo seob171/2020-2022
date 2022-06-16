@@ -1,7 +1,7 @@
 import Components from '../../core/Components.js';
 import Menu from './menu';
 import { $ } from '../../util/util';
-// import styled from 'styled-components';
+import '../../style/header.css';
 
 export default class Header extends Components {
   async initialState() {
@@ -21,11 +21,19 @@ export default class Header extends Components {
                         <form action="">
                             <fieldset>
                                 <div class="search_box_wrap">
-                                    <input type="text">
-                                    <button>검색</button>
+                                    <Input type="text">
+                                    <button>
+                                        검색
+                                    </button>
                                 </div>
                             </fieldset>
                         </form>
+                        <div class="gnb">
+                            <ul class="gnb_service"></ul>
+                            <div class="gnb_login">
+                                <span>로그인</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,15 +46,3 @@ export default class Header extends Components {
     new Menu($('#menu'));
   }
 }
-
-// const Input = styled.input`
-// 	overflow: hidden;
-// 	position: relative;
-// 	width: 143px;
-// 	font-size: 12px;
-// 	color: #b2b2b2;
-// 	border: 0;
-// 	outline: 0;
-// 	font-family: '돋움', dotum, 'Apple SD Gothic Neo', sans-serif;
-// 	margin: 8px 11px 6px;
-// `;

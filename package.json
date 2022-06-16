@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/seob171/zoom#readme",
   "devDependencies": {
+    "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.0",
     "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-transform-runtime": "^7.18.0",
@@ -41,7 +42,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.18.0",
     "core-js": "^3.22.5",
-    "regenerator-runtime": "^0.13.9",
-    "styled-components": "^5.3.5"
-  }
+    "regenerator-runtime": "^0.13.9"
+  },
+  "type": "module"
 }

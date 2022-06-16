@@ -1,13 +1,18 @@
 import Home from './pages/Home.js';
-import Posts from './pages/Posts.js';
-import Settings from './pages/Settings.js';
+import Life from './pages/Life.js';
+import Trip from './pages/Trip.js';
 import NotFound from './pages/NotFound.js';
+import Food from './pages/Food';
+import Culture from './pages/Culture';
+import { $ } from './util/util';
 
 const router = async () => {
   const routes = [
     { path: '/', view: Home },
-    { path: '/posts', view: Posts },
-    { path: '/settings', view: Settings },
+    { path: '/life', view: Life },
+    { path: '/food', view: Food },
+    { path: '/trip', view: Trip },
+    { path: '/culture', view: Culture },
   ];
 
   const pageMatches = routes.map(route => {
@@ -21,7 +26,7 @@ const router = async () => {
   if (match) {
     return match.route.view;
   } else {
-    return NotFound;
+    new NotFound($('#root'));
   }
 };
 export default router;

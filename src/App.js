@@ -16,7 +16,6 @@ export default class App extends Components {
     return `
       <div class="container">
       <section id="header"></section>
-<!--        <section class="nav"></section>-->
         <section id="app"></section>
       </div>
     `;
@@ -25,7 +24,8 @@ export default class App extends Components {
   async componentDidMount() {
     window.onload = async () => {
       const view = await router();
-      new view($('#app'));
+      console.log(view);
+      view && new view($('#app'));
     };
     new Header($('#header'));
   }

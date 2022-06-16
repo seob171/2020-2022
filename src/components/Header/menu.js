@@ -1,4 +1,6 @@
 import Components from '../../core/Components.js';
+import router from '../../router';
+import { $ } from '../../util/util';
 
 export default class Menu extends Components {
   async initialState() {
@@ -10,8 +12,8 @@ export default class Menu extends Components {
             <div class="menu_wrap">
                 <div class="inner">
                     <div class="category_menu">
-                        <ul>
-                            <li data-cm="home">
+                        <ul class="category_menu_ul">
+                            <li class="on" data-cm="home">
                                 <span>홈</span>
                             </li>
                             <li data-cm="life">
@@ -42,6 +44,24 @@ export default class Menu extends Components {
        </div>
     `;
   }
+  async componentDidMount() {
+    window.onpopstate = async () => {
+      const view = await router();
+      view && new view($('#app'));
+    };
 
-  async componentDidMount() {}
+    $('.category_menu_ul').addEventListener('click', async event => {
+      console.log(event);
+      event.preventDefault();
+      const { cm } = event.target.closest('li').dataset;
+      const { pathname } = window.location;
+      console.log(pathname);
+      if (pathname === '/' + cm || (pathname === '/' && cm === 'home')) return;
+      console.log(cm);
+      window.history.pushState(null, '', cm === 'home' ? '/' : cm);
+
+      const view = await router();
+      view && new view($('#app'));
+    });
+  }
 }
