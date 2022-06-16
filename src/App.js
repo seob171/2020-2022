@@ -1,40 +1,31 @@
-import Home from "./pages/Home.js";
-import Posts from "./pages/Posts.js";
-import Settings from "./pages/Settings.js";
-import NotFound from "./pages/NotFound.js";
 import Components from "./core/Components.js";
+import router from "./router.js";
 import { $ } from "./util/util.js";
-import Router from "./router";
-
-const CHANGE_ROUTE_EVENT = "locationChange";
+import Nav from "./components/Layout/Nav.js";
 
 export default class App extends Components {
+  constructor(props) {
+    super(props);
+  }
+
   async initialState() {
     this.setState({});
   }
 
   template() {
     return `
-      <h1>App</h1>
-      <nav>
-        <li data-navigate="/">home</li>
-        <li data-navigate="/posts">posts</li>
-        <li data-navigate="/setting">setting</li>
-      </nav>
-      <section class="home"></section>
-      <section class="posts"></section>
-      <section class="setting"></section>
-      <section class="notFound"></section>
+      <div class="container">
+        <section class="nav"></section>
+        <section id="app"></section>
+      </div>
     `;
   }
 
-  componentDidMount() {
-    const router = new Router();
-
-    router
-      .addRoute("/", new Home($(".home")))
-      .addRoute("/posts", new Posts($(".posts")))
-      .addRoute("/setting", new Settings($(".setting")))
-      .route();
+  async componentDidMount() {
+    window.onload = async () => {
+      const view = await router();
+      new view($("#app"));
+    };
+    new Nav($(".nav"));
   }
 }

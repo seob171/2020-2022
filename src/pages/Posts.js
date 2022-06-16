@@ -12,7 +12,11 @@ export default class Posts extends Components {
 
   template() {
     return `
+      <div class="container">
         <h1>Posts</h1>
+      </div>
     `;
   }
+
+  componentDidMount() {}
 }

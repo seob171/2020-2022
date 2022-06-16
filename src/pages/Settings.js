@@ -9,9 +9,14 @@ export default class Settings extends Components {
   async initialState() {
     this.setState({});
   }
+
   template() {
     return `
-      <h1>Settings</div>
+      <div class="container">
+        <h1>Settings</h1>
+      </div>
     `;
   }
+
+  componentDidMount() {}
 }

@@ -1,5 +1,4 @@
 import { $ } from "../util/util.js";
-
 import Components from "../core/Components.js";
 
 export default class Home extends Components {
