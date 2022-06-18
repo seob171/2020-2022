@@ -1,7 +1,7 @@
 import Components from './core/Components.js';
 import router from './router.js';
 import { $ } from './util/util.js';
-import Header from './components/Header/header.js';
+import Header from './components/Header/Header.js';
 
 export default class App extends Components {
   constructor(props) {
@@ -15,7 +15,7 @@ export default class App extends Components {
   template() {
     return `
       <div class="container">
-      <section id="header"></section>
+        <section id="header"></section>
         <section id="app"></section>
       </div>
     `;
@@ -24,7 +24,6 @@ export default class App extends Components {
   async componentDidMount() {
     window.onload = async () => {
       const view = await router();
-      console.log(view);
       view && new view($('#app'));
     };
     new Header($('#header'));

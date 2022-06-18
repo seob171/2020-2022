@@ -1,5 +1,5 @@
 import Components from '../../core/Components.js';
-import Menu from './menu';
+import Menu from './Menu';
 import { $ } from '../../util/util';
 import '../../style/header.css';
 

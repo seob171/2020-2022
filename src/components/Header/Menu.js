@@ -26,8 +26,11 @@ export default class Menu extends Components {
 								<span>여행</span>
 							</li>
                             <li data-cm="culture">
-                            	<span>컬쳐</span
-                            ></li>
+                            	<span>컬쳐</span>
+                           </li>
+                            <li data-cm="bookmark">
+                            	<span>즐겨찾기</span>
+                           </li>
                         </ul>
                     </div>
                     <div class="sub_menu">

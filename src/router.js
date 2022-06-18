@@ -2,9 +2,10 @@ import Home from './pages/Home.js';
 import Life from './pages/Life.js';
 import Trip from './pages/Trip.js';
 import NotFound from './pages/NotFound.js';
-import Food from './pages/Food';
-import Culture from './pages/Culture';
-import { $ } from './util/util';
+import Food from './pages/Food.js';
+import Culture from './pages/Culture.js';
+import { $ } from './util/util.js';
+import Bookmark from './pages/Bookmark.js';
 
 const router = async () => {
   const routes = [
@@ -13,6 +14,7 @@ const router = async () => {
     { path: '/food', view: Food },
     { path: '/trip', view: Trip },
     { path: '/culture', view: Culture },
+    { path: '/bookmark', view: Bookmark },
   ];
 
   const pageMatches = routes.map(route => {

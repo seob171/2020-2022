@@ -58,7 +58,7 @@ const config = {
     historyApiFallback: true,
     liveReload: true,
     open: true,
-    port: 5500,
+    port: 3000,
     // watchContentBase:true,
     // watchOptions:{
     //     poll:1000,
