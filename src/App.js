@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import {useEffect} from "react";
 
 function App() {
+
+  useEffect(() => {
+    const webSocket = new WebSocket('ws://localhost:3001')
+
+    webSocket.onopen = ()=>{
+      console.log('서버와 웹소켓 연결 성공!')
+    }
+
+    webSocket.onmessage = (event)=>{
+      console.log(event)
+      setTimeout(()=>
+        webSocket.send('클라이언트에서 답장을 보냅니다 Client.'),2000
+      )
+    }
+
+    return () => {
+      webSocket.close()
+    }
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>F12를 눌러 console 탭과 network 탭을 확인하세요.</div>
+
     </div>
   );
 }
