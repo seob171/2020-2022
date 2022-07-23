@@ -1,29 +1,10 @@
 import styled from '@emotion/styled'
 
 const Menu = styled.div`
-  position: absolute;
-  top: 100%;
-  left: 0px;
-  margin-top: 2px;
-
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  min-width: 120px;
-  max-height: 300px;
-
-  padding: 5px 0;
+  padding: 5px 0px;
+  -webkit-box-flex: 1;
   flex-grow: 1;
   overflow-y: scroll;
-
-  background-color: white;
-  border: 1px solid #c3c9d0;
-  box-sizing: border-box;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2), 0px 0 2px rgba(0, 0, 0, 0.06);
-  border-radius: 3px;
-
-  z-index: 40;
 `
 
 export default Menu

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 const Input = styled.input`
   box-sizing: border-box;
@@ -22,6 +22,6 @@ const Input = styled.input`
     color: #b2b8bf;
     line-height: inherit !important;
   }
-`;
+`
 
-export default Input;
+export default Input
