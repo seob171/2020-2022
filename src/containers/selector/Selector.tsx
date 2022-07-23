@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Button, Icon, Input, Menu, Ul, MenuItem } from '../../components'
 import { RelativeContainer } from '../../components/container/container'
@@ -24,11 +24,16 @@ const Selector = ({
   // 메뉴 open 토글 함수
   const toggle = () => setIsOpen((prev) => !prev)
 
+  const handleSelectItem = useCallback((item: string) => {
+    onSubmit([item])
+    toggle()
+  }, [])
+
   /* [여기에 코드 추가/수정/삭제] */
   return (
     <RelativeContainer>
       <Button>
-        {placeholder}
+        {selected.length === 0 ? placeholder : selected[0]}
         {/*selector 확장 컴포넌트*/}
         <div onClick={toggle}>
           {isOpen ? (
@@ -48,8 +53,8 @@ const Selector = ({
           <Ul>
             {list.map((v, i) => {
               return (
-                <li key={v + i}>
-                  <MenuItem itemType="checkbox" checked>
+                <li key={v + i} onClick={() => handleSelectItem(v)}>
+                  <MenuItem itemType="checkbox" checked={selected.includes(v)}>
                     {v}
                   </MenuItem>
                 </li>

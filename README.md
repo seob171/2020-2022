@@ -16,9 +16,10 @@ AB180에서는 지원자분들의 기술적 역량과 함께, 어떤 단계와 �
 
 - useState 로 open/close 토글 상태를 관리했습니다.
 
-### ✅ Step 2 — 값 선택 기능 구현하기 (O / X)
+### ✅ Step 2 — 값 선택 기능 구현하기 (O)
 
-여기에 내용을 입력해주세요.
+- li 태그에 onClick 이벤트를 통해 onSubmit 함수로 클릭한 list 아이템을 string[] 형태로 전달하여 selected에 저장하고
+  includes를 통해 checked값을 변경하였습니다.
 
 ### 🔍 Step 3 — 검색 기능 구현하기 (O / X)
 
