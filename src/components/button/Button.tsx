@@ -1,9 +1,10 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React from 'react'
+import styled from '@emotion/styled'
 
 const ButtonBase = styled.button`
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   width: 100%;
   height: 32px;
@@ -18,14 +19,14 @@ const ButtonBase = styled.button`
   background: white;
   color: #575a5e;
   font-size: 12px;
-`;
+`
 
-type Props = React.ComponentProps<typeof ButtonBase>;
+type Props = React.ComponentProps<typeof ButtonBase>
 
 const Button = React.forwardRef<HTMLButtonElement, Props>(
   ({ type = 'button', ...props }, ref) => (
     <ButtonBase {...props} ref={ref} type={type} />
-  ),
-);
+  )
+)
 
-export default Button;
+export default Button

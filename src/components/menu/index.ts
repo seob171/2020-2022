@@ -1,3 +1,4 @@
-import Menu from './Menu';
+import Menu from './Menu'
+import Ul from './Ul'
 
-export default Menu;
+export { Menu, Ul }

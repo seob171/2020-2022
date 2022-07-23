@@ -1,6 +1,11 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled'
 
 const Menu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  margin-top: 2px;
+
   display: flex;
   flex-direction: column;
 
@@ -19,6 +24,6 @@ const Menu = styled.div`
   border-radius: 3px;
 
   z-index: 40;
-`;
+`
 
-export default Menu;
+export default Menu
