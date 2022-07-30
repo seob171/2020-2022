@@ -5,24 +5,18 @@ import { setItem } from "../modules/setMemo";
 
 export default class Contents extends Components {
   async initialState() {
-    const { memo } = memoStore.getState();
-    console.log(memo);
-
-    this.setState({});
+    this.setState({ index: this.props });
   }
 
   template() {
     const { index } = this.state;
-    console.log(index);
 
     return `
       <div
         id="textarea:${index}"
         class="textarea"
         contentEditable="true"
-        style=${`width:${size.width}px;height:${size.height}px`}
       >
-        ${contents}
       </div>
       <button id="btn_size:${index}" class="btn_size">
           <span class="blind">메모장 크기 조절</span>
@@ -34,9 +28,15 @@ export default class Contents extends Components {
     const { index } = this.state;
     const { memo } = memoStore.getState();
     const item = memo.find((v) => v.index === index);
-    const { order } = item;
+    const { order, size, contents } = item;
 
     const textarea = $ID(`textarea:${index}`);
+
+    textarea.setAttribute(
+      "style",
+      `width:${size.width}px;height:${size.height}px`
+    );
+    textarea.innerText = contents;
 
     let timer = null;
     const debounce = (fn, delay) => {
