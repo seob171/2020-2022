@@ -24,7 +24,13 @@ export default class Header extends Components {
   deleteMemo() {
     const { index } = this.state;
     const { memo } = memoStore.getState();
+
+    const target = $ID(`${MEMO_ID}:${index}`);
+    console.log(target);
+    $(".wrap").removeChild(target);
+
     const item = memo.find((v) => v.index === index);
+    if (!item) return;
     const filtered = memo.filter((memo) => memo.index !== index);
     const ordered = filtered.map((memo) => {
       return {
@@ -33,8 +39,6 @@ export default class Header extends Components {
       };
     });
     memoStore.dispatch(setItem(ordered));
-    const target = $ID(`${MEMO_ID}:${index}`);
-    $(".wrap").removeChild(target);
   }
 
   async componentDidMount() {

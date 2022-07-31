@@ -2,6 +2,8 @@ import Components from "../core/Component";
 import { $, $ID } from "../util/util";
 import Header from "./Header";
 import Contents from "./Contents";
+import { MEMO_ID } from "../constant";
+import { memoStore } from "../store";
 
 export default class Memo extends Components {
   async initialState() {
@@ -20,8 +22,17 @@ export default class Memo extends Components {
   async componentDidMount() {
     const { index } = this.state;
 
+    const header = $ID(`header:${index}`);
+    const content = $ID(`content:${index}`);
+
+    if (!header || !content) return;
+
     new Header($ID(`header:${index}`), this.props);
     new Contents($ID(`content:${index}`), this.props);
+
+    const currentMemo = $ID(`${MEMO_ID}:${index}`);
+    const { memo } = memoStore.getState();
+    currentMemo.style.zIndex = memo.find((item) => item.index === index).order;
 
     // header.onmousedown = (e) => {
     //   let shiftX = e.clientX - header.getBoundingClientRect().left;

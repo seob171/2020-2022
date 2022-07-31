@@ -19,10 +19,13 @@ export default class App extends Components {
     memo.setAttribute("id", `${MEMO_ID}:${item.index}`);
     memo.setAttribute(
       "style",
-      `top:${item.position.top}px;left:${item.position.left}px;resize:both;overflow:auto`
+      `top:${item.position.top}px;left:${item.position.left}px;z-index:${item.order}`
     );
     $(".wrap").appendChild(memo);
-    new Memo($ID(`${MEMO_ID}:${item.index}`), item.index);
+    const newMemo = new Memo($ID(`${MEMO_ID}:${item.index}`), item.index);
+    memoStore.subscribe(() => {
+      newMemo.render();
+    });
   }
 
   // 초기 렌더링시 로컬스토리지에 저장된 메모리스트를 불러와 화면에 렌더링하는 함수
