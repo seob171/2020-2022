@@ -93,7 +93,6 @@ export default class Contents extends Components {
       if (item) currentMemo.style.zIndex = item.order;
     };
 
-    textarea.onmousedown = (e) => console.log(e);
     textarea.onmouseup = (e) => {
       const style = textarea.getAttribute("style");
       const styleObj = style.split(";").reduce((prev, next) => {
@@ -130,7 +129,7 @@ export default class Contents extends Components {
           return item;
         }
       });
-      memoStore.dispatch(setItem(ordered));
+      // memoStore.dispatch(setItem(ordered));
     };
   }
 }

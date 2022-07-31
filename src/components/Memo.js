@@ -4,6 +4,7 @@ import Header from "./Header";
 import Contents from "./Contents";
 import { MEMO_ID } from "../constant";
 import { memoStore } from "../store";
+import { setItem } from "../modules/setMemo";
 
 export default class Memo extends Components {
   async initialState() {
@@ -34,80 +35,77 @@ export default class Memo extends Components {
     const { memo } = memoStore.getState();
     currentMemo.style.zIndex = memo.find((item) => item.index === index).order;
 
-    // header.onmousedown = (e) => {
-    //   let shiftX = e.clientX - header.getBoundingClientRect().left;
-    //   let shiftY = e.clientY - header.getBoundingClientRect().top;
-    //
-    //   // $(".wrap").append(header);
-    //
-    //   // 초기 이동을 고려한 좌표 (pageX, pageY)에서 메모이동
-    //   function moveAt(pageX, pageY) {
-    //     return {
-    //       top: pageY - shiftY,
-    //       left: pageX - shiftX,
-    //     };
-    //   }
-    //
-    //   const onMouseMove = (e) => {
-    //     const position = moveAt(e.pageX, e.pageY);
-    //     console.log(position);
-    //     this.setState({
-    //       ...this.state,
-    //       memoAttr: {
-    //         ...this.state.memoAttr,
-    //         position,
-    //       },
-    //     });
-    //   };
-    //
-    //   document.addEventListener("mousemove", onMouseMove);
-    //   // 메모을 드롭하고, onmousemove 핸들러 제거
-    //   header.onmouseup = function () {
-    //     console.log("onmouseup!!!");
-    //     header.removeEventListener("mousedown", onMouseMove);
-    //     // header.removeEventListener("mousemove", onMouseMove);
-    //     // header.onmousemove = null;
-    //     header.onmouseup = null;
-    //     return false;
-    //   };
-    // };
-    //
-    // header.ondragstart = function () {
-    //   return false;
-    // };
-    //
-    // header.ondragend = (e) => {
-    //   console.log(e);
-    // };
+    function dragElement(element) {
+      let pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+      let position = { top: 0, left: 0 };
+      if (header) {
+        // if present, the header is where you move the DIV from:
+        header.onmousedown = dragMouseDown;
+      } else {
+        // otherwise, move the DIV from anywhere inside the DIV:
+        element.onmousedown = dragMouseDown;
+      }
 
-    // ------------------------------
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
 
-    // const sizeBtn = $ID(`${MEMO_ID}:${index}`);
-    // console.log(sizeBtn);
-    //
-    // function onTargetChange(event, index) {
-    //   const localMemo = JSON.parse(localStorage.getItem(MEMO_ID)) || [];
-    //   console.log("event-height:", event.target.clientHeight);
-    //   console.log("event-width:", event.target.clientWidth);
-    //
-    //   const newLocalMemo = localMemo.map((memo) => {
-    //     if (memo.index === index) {
-    //       return {
-    //         ...memo,
-    //         size: {
-    //           width: event.target.clientWidth,
-    //           height: event.target.clientHeight,
-    //         },
-    //       };
-    //     }
-    //     return memo;
-    //   });
-    //   console.log("newLocalMemo:", newLocalMemo);
-    //
-    //   localStorage.setItem(MEMO_ID, JSON.stringify(newLocalMemo));
-    // }
-    // sizeBtn.addEventListener("mouseup", (event) =>
-    //   onTargetChange(event, index)
-    // );
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        const top = element.offsetTop - pos2;
+        const left = element.offsetLeft - pos1;
+        element.style.top = top + "px";
+        element.style.left = left + "px";
+
+        position = { top, left };
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+        console.log(position);
+        const { memo } = memoStore.getState();
+        const target = memo.find((v) => v.index === index);
+
+        const ordered = memo.map((item) => {
+          // item의 order가 현재 클릭한 타겟의 order보다 큰 경우 현재 타겟을 최상위로 올려야 하므로 order를 -1씩 감소한다.
+          if (item.order > target.order) {
+            return { ...item, order: item.order - 1 };
+          }
+          // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
+          else if (item.index === target.index) {
+            return {
+              ...item,
+              order: memo.length - 1,
+              position: position,
+            };
+          }
+          // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
+          else {
+            return item;
+          }
+        });
+        memoStore.dispatch(setItem(ordered));
+      }
+    }
+    dragElement(currentMemo);
   }
 }
