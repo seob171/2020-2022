@@ -19,9 +19,6 @@ export default class Contents extends Components {
         contentEditable="true"
       >
       </div>
-      <button id="btn_size:${index}" class="btn_size" draggable="true">
-          <span class="blind">메모장 크기 조절</span>
-      </button>
     `;
   }
 
@@ -40,6 +37,8 @@ export default class Contents extends Components {
       "style",
       `width:${size.width}px;height:${size.height}px`
     );
+    textarea.style.overflow = "auto";
+    textarea.style.resize = "both";
     textarea.innerText = contents;
 
     let timer = null;
@@ -94,25 +93,44 @@ export default class Contents extends Components {
       if (item) currentMemo.style.zIndex = item.order;
     };
 
-    const size_btn = $ID(`btn_size:${index}`);
+    textarea.onmousedown = (e) => console.log(e);
+    textarea.onmouseup = (e) => {
+      const style = textarea.getAttribute("style");
+      const styleObj = style.split(";").reduce((prev, next) => {
+        if (next === "") return prev;
+        const [key, value] = next.split(":");
+        return { ...prev, [key.trim()]: value.trim() };
+      }, {});
+      console.log(styleObj);
+      const regex = /[^0-9]/g;
 
-    size_btn.ondrag = (e) => {
-      console.log(e);
-      // const ordered = memo.map((memo) => {
-      //   if (memo.index === index) {
-      //     return { ...memo, size: { width: 500, height: 500 } };
-      //   } else {
-      //     return memo;
-      //   }
-      // });
-      // memoStore.dispatch(setItem(ordered));
+      const width = styleObj.width.replace(regex, "");
+      const height = styleObj.height.replace(regex, "");
+
+      console.log(parseInt(width), parseInt(height));
+
+      const ordered = memo.map((item) => {
+        const { memo } = memoStore.getState();
+        const target = memo.find((v) => v.index === index);
+
+        // item의 order가 현재 클릭한 타겟의 order보다 큰 경우 현재 타겟을 최상위로 올려야 하므로 order를 -1씩 감소한다.
+        if (item.order > target.order) {
+          return { ...item, order: item.order - 1 };
+        }
+        // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
+        else if (item.index === target.index) {
+          return {
+            ...item,
+            order: memo.length - 1,
+            size: { width: parseInt(width), height: parseInt(height) },
+          };
+        }
+        // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
+        else {
+          return item;
+        }
+      });
+      memoStore.dispatch(setItem(ordered));
     };
-    size_btn.ondragover = (e) => e.preventDefault();
-    // size_btn.ondrag = (e) => console.log(e);
-    // size_btn.onmousedown = (e) => {
-    //   size_btn.onmousemove = (e) => {
-    //     console.log(e);
-    //   };
-    // };
   }
 }
