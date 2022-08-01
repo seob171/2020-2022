@@ -27,13 +27,22 @@ export default class Memo extends Components {
     const content = $ID(`content:${index}`);
 
     if (!header || !content) return;
+    const { memo } = memoStore.getState();
+    const target = memo.find((v) => v.index === index);
+    const { size, order } = target;
+
+    content.setAttribute(
+      "style",
+      `width:${size.width}px;height:${size.height}px`
+    );
+    content.style.overflow = "auto";
+    content.style.resize = "both";
 
     new Header($ID(`header:${index}`), this.props);
     new Contents($ID(`content:${index}`), this.props);
 
     const currentMemo = $ID(`${MEMO_ID}:${index}`);
-    const { memo } = memoStore.getState();
-    currentMemo.style.zIndex = memo.find((item) => item.index === index).order;
+    currentMemo.style.zIndex = order;
 
     function dragElement(element) {
       let pos1 = 0,
@@ -46,12 +55,13 @@ export default class Memo extends Components {
         header.onmousedown = dragMouseDown;
       } else {
         // otherwise, move the DIV from anywhere inside the DIV:
-        element.onmousedown = dragMouseDown;
+        // element.onmousedown = dragMouseDown;
       }
 
       function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
+        currentMemo.style.zIndex = memo.length;
         // get the mouse cursor position at startup:
         pos3 = e.clientX;
         pos4 = e.clientY;
@@ -107,5 +117,45 @@ export default class Memo extends Components {
       }
     }
     dragElement(currentMemo);
+
+    content.onmouseup = (e) => {
+      if (e.target !== content) return;
+      const style = content.getAttribute("style");
+      const styleObj = style.split(";").reduce((prev, next) => {
+        if (next === "") return prev;
+        const [key, value] = next.split(":");
+        return { ...prev, [key.trim()]: value.trim() };
+      }, {});
+      console.log(styleObj);
+      const regex = /[^0-9]/g;
+
+      const width = styleObj.width.replace(regex, "");
+      const height = styleObj.height.replace(regex, "");
+
+      console.log(parseInt(width), parseInt(height));
+
+      const ordered = memo.map((item) => {
+        const { memo } = memoStore.getState();
+        const target = memo.find((v) => v.index === index);
+
+        // item의 order가 현재 클릭한 타겟의 order보다 큰 경우 현재 타겟을 최상위로 올려야 하므로 order를 -1씩 감소한다.
+        if (item.order > target.order) {
+          return { ...item, order: item.order - 1 };
+        }
+        // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
+        else if (item.index === target.index) {
+          return {
+            ...item,
+            order: memo.length - 1,
+            size: { width: parseInt(width), height: parseInt(height) },
+          };
+        }
+        // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
+        else {
+          return item;
+        }
+      });
+      memoStore.dispatch(setItem(ordered));
+    };
   }
 }

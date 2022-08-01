@@ -25,6 +25,8 @@ export default class Header extends Components {
     const { index } = this.state;
     const { memo } = memoStore.getState();
 
+    console.log("hello");
+
     const target = $ID(`${MEMO_ID}:${index}`);
     console.log(target);
     $(".wrap").removeChild(target);
@@ -47,7 +49,11 @@ export default class Header extends Components {
     // close 버튼
     const btn_close = $ID(`btn_close:${index}`);
 
+    console.log(btn_close);
+
     // close 버튼 클릭 이벤트 - index 에 해당하는 item 삭제
-    btn_close.onclick = () => this.deleteMemo();
+    btn_close.addEventListener("click", () => {
+      console.log("hello");
+    });
   }
 }
