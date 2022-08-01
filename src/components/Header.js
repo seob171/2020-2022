@@ -48,12 +48,10 @@ export default class Header extends Components {
 
     // close 버튼
     const btn_close = $ID(`btn_close:${index}`);
+    btn_close.style.zIndex = 999;
 
     console.log(btn_close);
 
-    // close 버튼 클릭 이벤트 - index 에 해당하는 item 삭제
-    btn_close.addEventListener("click", () => {
-      console.log("hello");
-    });
+    btn_close.onclick = () => this.deleteMemo();
   }
 }

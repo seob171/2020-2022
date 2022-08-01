@@ -67,9 +67,38 @@ export default class Contents extends Components {
       memoStore.dispatch(setItem(ordered));
     };
 
+    const saveContents = (e) => {
+      const { memo } = memoStore.getState();
+      console.log(memo);
+      const target = memo.find((v) => v.index === index);
+      console.log(target);
+      localStorage.setItem(
+        MEMO_ID,
+        JSON.stringify(
+          memo.map((item) => {
+            if (item.order > target.order) {
+              return { ...item, order: item.order - 1 };
+            }
+            // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
+            else if (item.index === target.index) {
+              return {
+                ...item,
+                contents: e.target.innerText,
+                order: memo.length - 1,
+              };
+            }
+            // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
+            else {
+              return item;
+            }
+          })
+        )
+      );
+    };
+
     // textarea에 keydown 이벤트 시 디바운스로 contents, order 변경 처리
     textarea.onkeydown = (e) => {
-      debounce(() => setContents(e), 500);
+      debounce(() => saveContents(e), 200);
     };
 
     // textarea에 포커스 이벤트 발생시 z-index를 현재 리스트중에서 가장 높은 값으로 설정
@@ -86,6 +115,7 @@ export default class Contents extends Components {
       const { memo } = memoStore.getState();
       const item = memo.find((value) => value.index === index);
       if (item) currentMemo.style.zIndex = item.order;
+      setContents(e);
     };
   }
 }

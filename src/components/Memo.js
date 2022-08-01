@@ -61,6 +61,8 @@ export default class Memo extends Components {
       function dragMouseDown(e) {
         e = e || window.event;
         e.preventDefault();
+        // 메모 mousedown 이벤트
+        if (e.target === $ID(`btn_close:${index}`)) return;
         currentMemo.style.zIndex = memo.length;
         // get the mouse cursor position at startup:
         pos3 = e.clientX;
@@ -87,7 +89,7 @@ export default class Memo extends Components {
         position = { top, left };
       }
 
-      function closeDragElement() {
+      function closeDragElement(e) {
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
