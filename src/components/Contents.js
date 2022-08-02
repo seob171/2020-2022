@@ -3,7 +3,19 @@ import { $ID } from "../util/util";
 import { memoStore } from "../store";
 import { setItem } from "../modules/setMemo";
 import { MEMO_ID } from "../constant";
+import { Debounce, getNewMemoList } from "../util/memo";
 
+/**************************************************
+ * seob - 메모장 컴포넌트의 하위 컨텐츠 컴포넌트
+ *
+ * - 구성 컴포넌트 -
+ * 컨텐츠 div 엘리먼트
+ *
+ * - 기능 -
+ * keydown 이벤트로 컨텐츠 컴포넌트 내용 변경 기능
+ * focus 이벤트로 포커스시 컴포넌트 order를 최상단으로 변경
+ * blur 이벤트로 블러시 마지막으로 설정된 order로 변경
+ ***************************************************/
 export default class Contents extends Components {
   async initialState() {
     this.setState({ index: this.props });
@@ -23,88 +35,47 @@ export default class Contents extends Components {
   }
 
   async componentDidMount() {
+    const Debouncer = new Debounce();
     const { index } = this.state;
     const { memo } = memoStore.getState();
 
     const target = memo.find((v) => v.index === index);
     if (!target) return;
-    console.log(target);
+
+    // 초기 스타일 및 컨텐츠 삽입
     const { contents } = target;
-
     const textarea = $ID(`textarea:${index}`);
-
     textarea.setAttribute("style", `width:100%;height:100%`);
     textarea.innerText = contents;
 
-    let timer = null;
-    const debounce = (fn, delay) => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(fn, delay);
-    };
-
+    // 리덕스에 컨텐츠 저장
     const setContents = (e) => {
       const { memo } = memoStore.getState();
-      const target = memo.find((v) => v.index === index);
 
-      const ordered = memo.map((item) => {
-        // item의 order가 현재 클릭한 타겟의 order보다 큰 경우 현재 타겟을 최상위로 올려야 하므로 order를 -1씩 감소한다.
-        if (item.order > target.order) {
-          return { ...item, order: item.order - 1 };
-        }
-        // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
-        else if (item.index === target.index) {
-          return {
-            ...item,
-            contents: e.target.innerText,
-            order: memo.length - 1,
-          };
-        }
-        // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
-        else {
-          return item;
-        }
+      const newMemoList = getNewMemoList(memo, index, {
+        contents: e.target.innerText,
       });
-      memoStore.dispatch(setItem(ordered));
+      memoStore.dispatch(setItem(newMemoList));
     };
 
+    // 로컬스토리지에 컨텐츠 저장
     const saveContents = (e) => {
       const { memo } = memoStore.getState();
-      console.log(memo);
-      const target = memo.find((v) => v.index === index);
-      console.log(target);
-      localStorage.setItem(
-        MEMO_ID,
-        JSON.stringify(
-          memo.map((item) => {
-            if (item.order > target.order) {
-              return { ...item, order: item.order - 1 };
-            }
-            // item이 현재 타겟이면 order를 현재 배열 아이템중 최상위로 설정한다.
-            else if (item.index === target.index) {
-              return {
-                ...item,
-                contents: e.target.innerText,
-                order: memo.length - 1,
-              };
-            }
-            // item의 order가 현재 클릭한 타겟 order보다 작은경우 그대로 리턴한다.
-            else {
-              return item;
-            }
-          })
-        )
-      );
+      console.log(e.target.innerText);
+      const newMemoList = getNewMemoList(memo, index, {
+        contents: e.target.innerText,
+      });
+      localStorage.setItem(MEMO_ID, JSON.stringify(newMemoList));
     };
 
     // textarea에 keydown 이벤트 시 디바운스로 contents, order 변경 처리
     textarea.onkeydown = (e) => {
-      debounce(() => saveContents(e), 200);
+      Debouncer.debounce(() => saveContents(e), 200);
     };
 
     // textarea에 포커스 이벤트 발생시 z-index를 현재 리스트중에서 가장 높은 값으로 설정
     textarea.onfocus = (e) => {
       const currentMemo = $ID(`${MEMO_ID}:${index}`);
-      console.log(e.currentTarget);
       const { memo } = memoStore.getState();
       currentMemo.style.zIndex = memo.length;
     };

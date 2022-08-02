@@ -3,7 +3,18 @@ import { $, $ID } from "../util/util";
 import { MEMO_ID } from "../constant";
 import { memoStore } from "../store";
 import { setItem } from "../modules/setMemo";
+import { getNewMemoList } from "../util/memo";
 
+/**************************************************
+ * seob - 메모장 컴포넌트 하위 헤더 컴포넌트
+ *
+ * - 구성 엘리먼트 -
+ * 메모장 헤더 h1 엘리먼트
+ * close 버튼 엘리먼트
+ *
+ * - 기능 -
+ * close 버튼에 click 이벤트로 wrap 컴포넌트 및 로컬스토리지에서 해당 메모 데이터 삭제
+ ***************************************************/
 export default class Header extends Components {
   async initialState() {
     this.setState({ index: this.props });
@@ -20,38 +31,25 @@ export default class Header extends Components {
     `;
   }
 
-  //
-  deleteMemo() {
-    const { index } = this.state;
-    const { memo } = memoStore.getState();
-
-    console.log("hello");
-
-    const target = $ID(`${MEMO_ID}:${index}`);
-    console.log(target);
-    $(".wrap").removeChild(target);
-
-    const item = memo.find((v) => v.index === index);
-    if (!item) return;
-    const filtered = memo.filter((memo) => memo.index !== index);
-    const ordered = filtered.map((memo) => {
-      return {
-        ...memo,
-        ...(memo.order > item.order && { order: memo.order - 1 }),
-      };
-    });
-    memoStore.dispatch(setItem(ordered));
-  }
-
   async componentDidMount() {
     const { index } = this.state;
 
-    // close 버튼
     const btn_close = $ID(`btn_close:${index}`);
-    btn_close.style.zIndex = 999;
+    // close 버튼에 클릭 이벤트 추가
+    btn_close.onclick = () => {
+      const { index } = this.state;
+      const { memo } = memoStore.getState();
 
-    console.log(btn_close);
+      // 메모 타겟을 wrap 엘리먼트에서 제거
+      const target = $ID(`${MEMO_ID}:${index}`);
+      $(".wrap").removeChild(target);
 
-    btn_close.onclick = () => this.deleteMemo();
+      // 현재 타겟이 제거된 새 메모 리스트
+      const newMemoList = getNewMemoList(memo, index).filter(
+        (v) => v.index !== index
+      );
+      // 새로운 메모 리스트 set
+      memoStore.dispatch(setItem(newMemoList));
+    };
   }
 }
