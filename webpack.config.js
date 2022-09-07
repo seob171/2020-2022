@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
-const webpack = reqiure("webpack");
+// const webpack = require("webpack");
 
 module.exports = (env, argv) => {
     const prod = argv.mode === "production";
@@ -36,9 +36,9 @@ module.exports = (env, argv) => {
         },
         // 부가기능 플러그인
         plugins: [
-            new webpack.ProvidePlugin({
-                React: "react",
-            }),
+            // new webpack.ProvidePlugin({
+            //     React: "react",
+            // }),
             new HtmlWebpackPlugin({
                 // HTML 파일에 번들링 된 자바스크립트 파일을 삽입해주고 빌드시 HTML 파일로 아웃풋에 생성됨
                 template: "./public/index.html",
