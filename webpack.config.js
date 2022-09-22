@@ -1,7 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const path = require("path");
-// const webpack = require("webpack");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
     const prod = argv.mode === "production";
@@ -32,6 +32,18 @@ module.exports = (env, argv) => {
                     use: ["babel-loader", "ts-loader"],
                     exclude: /node_modules/,
                 },
+                {
+                    test: /\.(scss|css)$/,
+                    //      exclude: [`${cwd}/src/assets/ngivr.scss`],
+                    use: [
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {},
+                        },
+                        "css-loader",
+                        "sass-loader",
+                    ],
+                },
             ],
         },
         // 부가기능 플러그인
@@ -51,6 +63,7 @@ module.exports = (env, argv) => {
                         : false,
             }),
             new CleanWebpackPlugin(), // 번들링시 이전 번들링 결과물 제거
+            new MiniCssExtractPlugin(),
         ],
     };
 };
