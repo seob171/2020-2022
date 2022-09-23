@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import repositoryAtom from "../recoil/repository";
-import { Grid, Item } from "semantic-ui-react";
+import { Button, Grid, Icon, Item } from "semantic-ui-react";
 import styled from "styled-components";
-import { getUsersRepository } from "../api/main";
+import { getRepositoryIssues, getUsersRepository } from "../api/main";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 const GridExampleDividedPhrase = () => {
@@ -25,6 +25,7 @@ const GridExampleDividedPhrase = () => {
             username: repository.username,
             page: repository.page + 1,
         })) as any;
+        if (usersRepository.length === 0) return;
 
         console.log("🍓", repository.list);
 
@@ -39,53 +40,110 @@ const GridExampleDividedPhrase = () => {
     const { setTarget } = useIntersectionObserver({
         root: null,
         rootMargin: "20px",
-        threshold: 0,
+        threshold: 0.5,
         callback: getMoreRepository,
     });
+
+    const handleGetIssue = async (col: {
+        name: string;
+        full_name: string;
+        open_issues_count: number;
+        stargazers_count: number;
+        language: string;
+        description: string;
+        owner: { login: string };
+    }) => {
+        console.log(col);
+        const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
+        console.log(issues);
+    };
+
+    const handleAddItem = async (col: {
+        name: string;
+        full_name: string;
+        open_issues_count: number;
+        stargazers_count: number;
+        language: string;
+        description: string;
+        owner: { login: string };
+    }) => {
+        console.log(col);
+        const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
+        console.log(issues);
+    };
+
+    const handleMoveLink = async (col: {
+        name: string;
+        full_name: string;
+        open_issues_count: number;
+        stargazers_count: number;
+        language: string;
+        description: string;
+        owner: { login: string };
+    }) => {
+        console.log(col);
+        const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
+        console.log(issues);
+    };
+
+    useEffect(() => {
+        setIsLoaded(false);
+    }, [repository]);
 
     return (
         <Grid columns={3}>
             {arrayChunk(repository.list, 3).map((row, i) => (
-                <GridRow key={i}>
-                    {row.map(
-                        (
-                            col: {
-                                name: string;
-                                full_name: string;
-                                has_issues: boolean;
-                                stargazers_count: number;
-                                language: string;
-                                description: string;
-                            },
-                            i,
-                        ) => (
-                            <GridCol key={i}>
-                                <StyledItem>
-                                    {/*<Item.Image size="tiny" src="/images/wireframe/image.png" />*/}
+                <React.Fragment key={i + "row"}>
+                    <GridRow>
+                        {row.map(
+                            (
+                                col: {
+                                    name: string;
+                                    full_name: string;
+                                    open_issues_count: number;
+                                    stargazers_count: number;
+                                    language: string;
+                                    description: string;
+                                    owner: { login: string };
+                                },
+                                i,
+                            ) => (
+                                <GridCol key={i + "col"} onClick={() => handleGetIssue(col)}>
+                                    <StyledItem>
+                                        {/*<Item.Image size="tiny" src="/images/wireframe/image.png" />*/}
 
-                                    <Item.Content>
                                         <StyledHeader>
-                                            {col.has_issues && (
-                                                <Label background={"#3099E7"} margin={"0px 8px 0px 0px"}>
-                                                    ISSUE
-                                                </Label>
-                                            )}
-                                            <Span bold>{col.name}</Span>
+                                            <Span bold color={col.open_issues_count ? "#F66A3A" : "#8d8d8d"}>
+                                                {col.open_issues_count} issues
+                                            </Span>
+                                            <div>
+                                                <Button
+                                                    icon="add"
+                                                    size={"mini"}
+                                                    color={"blue"}
+                                                    onClick={() => handleAddItem(col)}
+                                                />
+                                                <Button
+                                                    icon="github"
+                                                    size={"mini"}
+                                                    color={"black"}
+                                                    onClick={() => handleMoveLink(col)}
+                                                />
+                                            </div>
                                         </StyledHeader>
-                                        <Item.Description>{col.description}</Item.Description>
 
-                                        <Item.Meta>
-                                            <span className="price">{col.language}</span>
-                                            <span className="stay">{col.stargazers_count}</span>
-                                        </Item.Meta>
-                                    </Item.Content>
-                                </StyledItem>
-                            </GridCol>
-                        ),
-                    )}
-                </GridRow>
+                                        <Span bold>{col.name}</Span>
+                                        <Span fontSize={12} color={"#8d8d8d"}>
+                                            {col.description}
+                                        </Span>
+                                    </StyledItem>
+                                </GridCol>
+                            ),
+                        )}
+                    </GridRow>
+                    {!isLoaded && arrayChunk(repository.list, 3).length - 5 === i && <div ref={setTarget} />}
+                </React.Fragment>
             ))}
-            {!isLoaded && <div ref={setTarget} />}
         </Grid>
     );
 };
@@ -98,12 +156,15 @@ const Label = styled.label<{ padding?: string; background?: string; color?: stri
     font-size: 10px;
     font-weight: bold;
     margin: ${(props) => props.margin || "0px"};
+    height: 28px;
 `;
 
-const Span = styled.span<{ bold?: boolean; margin?: string }>`
+const Span = styled.span<{ bold?: boolean; margin?: string; fontSize?: number }>`
     display: flex;
     align-items: center;
     font-weight: ${(props) => (props.bold ? "bold" : "initial")};
+    font-size: ${(props) => `${props.fontSize}px` || "initial"};
+    color: ${(props) => props.color || "black"};
     margin: ${(props) => props.margin || "0px"};
 `;
 
@@ -121,8 +182,8 @@ const GridCol = styled.div`
 
 const StyledHeader = styled.header`
     display: flex;
-    // justify-content: space-between;
-    padding-bottom: 4px;
+    justify-content: space-between;
+    padding-bottom: 8px;
 `;
 
 const StyledItem = styled.div`
@@ -133,7 +194,8 @@ const StyledItem = styled.div`
     height: 150px;
     &:hover {
         cursor: pointer;
-        background: #b5d9f3;
+        background: #eeeeee;
+        border-color: #8d8d8d;
     }
     overflow: hidden;
 `;
