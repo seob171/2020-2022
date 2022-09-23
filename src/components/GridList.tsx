@@ -4,11 +4,11 @@ import repositoryAtom from "../recoil/repository";
 import { Grid, Item } from "semantic-ui-react";
 import styled from "styled-components";
 import { getUsersRepository } from "../api/main";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 const GridExampleDividedPhrase = () => {
-    const [loading, setLoading] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [repository, setRepository] = useRecoilState(repositoryAtom);
-    const loader = useRef(null);
 
     const arrayChunk = (arr: any, n: number) => {
         if (!Array.isArray(arr)) return [];
@@ -18,39 +18,30 @@ const GridExampleDividedPhrase = () => {
         return chunks;
     };
 
-    const handleObserver = useCallback(
-        async (entries: IntersectionObserverEntry[]) => {
-            if (!repository.username) return;
-            const target = entries[0];
-            if (target.isIntersecting) {
-                setLoading(true);
-                const usersRepository = (await getUsersRepository({
-                    username: repository.username,
-                    page: repository.page + 1,
-                })) as any;
+    const getMoreRepository = useCallback(async () => {
+        if (!repository.username || isLoaded) return;
+        setIsLoaded(true);
+        const usersRepository = (await getUsersRepository({
+            username: repository.username,
+            page: repository.page + 1,
+        })) as any;
 
-                console.log("🍓", repository.list);
+        console.log("🍓", repository.list);
 
-                setRepository((prev) => ({
-                    ...prev,
-                    list: [...repository.list, ...(usersRepository as [])],
-                    page: repository.page + 1,
-                }));
-            }
-            setLoading(false);
-        },
-        [repository, setLoading, getUsersRepository],
-    );
+        setRepository((prev) => ({
+            ...prev,
+            list: [...repository.list, ...(usersRepository as [])],
+            page: repository.page + 1,
+        }));
+        setIsLoaded(false);
+    }, [isLoaded, repository, getUsersRepository]);
 
-    useEffect(() => {
-        const option = {
-            root: null,
-            rootMargin: "20px",
-            threshold: 0,
-        };
-        const observer = new IntersectionObserver(handleObserver, option);
-        if (loader.current) observer.observe(loader.current! as HTMLDivElement);
-    }, [handleObserver]);
+    const { setTarget } = useIntersectionObserver({
+        root: null,
+        rootMargin: "20px",
+        threshold: 0,
+        callback: getMoreRepository,
+    });
 
     return (
         <Grid columns={3}>
@@ -94,7 +85,7 @@ const GridExampleDividedPhrase = () => {
                     )}
                 </GridRow>
             ))}
-            {!loading && <div ref={loader} />}
+            {!isLoaded && <div ref={setTarget} />}
         </Grid>
     );
 };
