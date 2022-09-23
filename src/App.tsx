@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
-import { getRepositoryIssues } from "./api/main";
-import BasicTextFields from "./components/TextField";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Home, NotFound } from "./pages";
 
 const App: React.FC = () => {
-    useEffect(() => {
-        const res = getRepositoryIssues({ owner: "microsoft", repo: "typescript" });
-        console.log(res);
-    }, []);
-
     return (
-        <div>
-            <BasicTextFields />
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route element={<NotFound />} />
+            </Routes>
+        </BrowserRouter>
     );
 };
 
