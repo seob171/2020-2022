@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useRecoilState } from "recoil";
 import { Input, Menu } from "semantic-ui-react";
 import styled from "styled-components";
-import { getUser } from "../../api/main";
+import { getUsersRepository } from "../../api/main";
+import repositoryAtom from "../../recoil/repository";
 
 const Header = () => {
+    const [repository, setRepository] = useRecoilState(repositoryAtom);
+
     const [activeItemName, setActiveItemName] = useState("home");
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("microsoft");
 
     const handleItemClick = (event: React.BaseSyntheticEvent) => {
         setActiveItemName(event.target.name);
@@ -17,8 +21,13 @@ const Header = () => {
 
     const handleInputSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const user = await getUser({ username: search });
-        console.log(user);
+        try {
+            if (repository.username === search) return;
+            const usersRepository = (await getUsersRepository({ username: search, page: repository.page })) as any;
+            setRepository((prev) => ({ ...prev, list: usersRepository, page: 1, username: search }));
+        } catch (err) {
+            console.log();
+        }
     };
 
     return (
@@ -41,7 +50,12 @@ const Header = () => {
 };
 
 const StyledHeader = styled.header`
+    position: fixed;
+    top: 0;
+    width: 100%;
     padding: 10px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
 `;
 
 export default Header;

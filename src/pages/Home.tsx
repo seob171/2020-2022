@@ -5,7 +5,6 @@ import Layout from "../components/layout/Layout";
 const Home = () => {
     return (
         <Layout>
-            <div>Home</div>
             <GridExampleDividedPhrase />
         </Layout>
     );

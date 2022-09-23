@@ -6,6 +6,7 @@ module.exports = {
     },
     extends: [
         "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended"
         // typescript 표준 규칙 모음
         "plugin:import/errors",
         "plugin:import/warnings",
@@ -15,6 +16,7 @@ module.exports = {
         "plugin:prettier/recommended",
         "prettier/@typescript-eslint",
         "prettier/react",
+
         // prettier 관련 규칙 모음
     ],
     parserOptions: {
@@ -23,7 +25,12 @@ module.exports = {
         // tsconfig 파일의 경로를 참조 해줍니다.
         // 기준은 root 입니다.
     },
+    plugins:['react-hooks']
     rules: {
-        // 추가하고 싶은 rule을 더 추가해줍니다.
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": ["warn",{
+            "additionalHooks":"useRecoilCallback",
+            "enableDangerousAutofixThisMayCauseInfiniteLoops": true
+        }]
     }
 };
