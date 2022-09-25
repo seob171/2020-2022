@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import GridExampleDividedPhrase from "../components/GridList";
+import GridSavedList from "../components/GridSavedList";
 import Layout from "../components/layout/Layout";
 import repositoryAtom from "../recoil/repository/atom";
 
@@ -12,12 +12,12 @@ interface ColumnDataTypes {
     id: number;
 }
 
-const Home = () => {
+const Save = () => {
     const [repository, setRepository] = useRecoilState(repositoryAtom);
 
     return (
         <Layout>
-            <GridExampleDividedPhrase
+            <GridSavedList
                 listItem={repository.savedRepository.map((v: { data: any }) => v.data) as []}
                 chunkSize={1}
             />
@@ -25,4 +25,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Save;

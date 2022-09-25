@@ -17,13 +17,12 @@ interface ColumnDataTypes {
     id: number;
 }
 
-interface IGridExampleDividedPhrase {
+interface IGridSavedList {
     listItem: [];
     chunkSize: number;
 }
 
-const GridExampleDividedPhrase = ({ listItem, chunkSize = 3 }: IGridExampleDividedPhrase) => {
-    const [isLoaded, setIsLoaded] = useState(false);
+const GridSavedList = ({ listItem, chunkSize = 3 }: IGridSavedList) => {
     let navigate = useNavigate();
     const [repository, setRepository] = useRecoilState(repositoryAtom);
     const [issues, setIssues] = useRecoilState(issueAtom);
@@ -37,32 +36,6 @@ const GridExampleDividedPhrase = ({ listItem, chunkSize = 3 }: IGridExampleDivid
         while (array.length) chunks.push(array.splice(0, n));
         return chunks;
     };
-
-    const getMoreRepository = useCallback(async () => {
-        if (!repository.username || isLoaded) return;
-        setIsLoaded(true);
-        const usersRepository = (await getUsersRepository({
-            username: repository.username,
-            page: repository.page + 1,
-        })) as any;
-        if (usersRepository.length === 0) return;
-
-        console.log("🍓", repository.list);
-
-        setRepository((prev) => ({
-            ...prev,
-            list: [...repository.list, ...(usersRepository as [])],
-            page: repository.page + 1,
-        }));
-        setIsLoaded(false);
-    }, [isLoaded, repository, getUsersRepository]);
-
-    const { setTarget } = useIntersectionObserver({
-        root: null,
-        rootMargin: "20px",
-        threshold: 0.5,
-        callback: getMoreRepository,
-    });
 
     const handleGetIssue = async (event: React.MouseEvent<HTMLDivElement>, col: ColumnDataTypes) => {
         setIssues((prev) => ({
@@ -95,10 +68,6 @@ const GridExampleDividedPhrase = ({ listItem, chunkSize = 3 }: IGridExampleDivid
         localStorage.setItem("savedRepository", JSON.stringify(savedRepository));
         setRepository((prev) => ({ ...prev, savedRepository: savedRepository } as any));
     };
-
-    useEffect(() => {
-        setIsLoaded(false);
-    }, [repository]);
 
     return (
         <Grid columns={3}>
@@ -147,7 +116,6 @@ const GridExampleDividedPhrase = ({ listItem, chunkSize = 3 }: IGridExampleDivid
                             </GridCol>
                         ))}
                     </GridRow>
-                    {!isLoaded && arrayChunk(listItem, chunkSize).length - 5 === i && <div ref={setTarget} />}
                 </React.Fragment>
             ))}
         </Grid>
@@ -210,4 +178,4 @@ const StyledItem = styled.div`
     overflow: hidden;
 `;
 
-export default GridExampleDividedPhrase;
+export default GridSavedList;

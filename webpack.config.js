@@ -19,6 +19,7 @@ module.exports = (env, argv) => {
             // 개발서버 설정
             port: 3000, // 포트
             hot: true, // 실시간 반영
+            historyApiFallback: true,
         },
         resolve: {
             // 번들링 가능한 확장자?

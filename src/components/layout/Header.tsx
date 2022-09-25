@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { Input, Menu } from "semantic-ui-react";
 import styled from "styled-components";
@@ -8,6 +9,8 @@ import LinkButton from "../LinkButton";
 
 const Header = () => {
     const [repository, setRepository] = useRecoilState(repositoryAtom);
+    const location = useLocation();
+    let navigate = useNavigate();
 
     const [activeItemName, setActiveItemName] = useState("home");
     const [search, setSearch] = useState("microsoft");
@@ -26,6 +29,7 @@ const Header = () => {
             if (repository.username === search) return;
             const usersRepository = (await getUsersRepository({ username: search, page: 1 })) as any;
             setRepository((prev) => ({ ...prev, list: usersRepository, page: 1, username: search }));
+            if (location.pathname !== "/") navigate("/");
         } catch (err) {
             console.log();
         }
