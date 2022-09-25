@@ -1,21 +1,34 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button, Menu } from "semantic-ui-react";
+import { Button, Icon, Label, Menu } from "semantic-ui-react";
 
 interface ILinkButton {
     name: string;
     path: string;
+    labelNum?: number;
 }
 
-const LinkButton = ({ name, path }: ILinkButton) => {
+const LinkButton = ({ name, path, labelNum }: ILinkButton) => {
     const location = useLocation();
 
     return (
         <Link to={path}>
-            <Button name={name} active={path === location.pathname}>
+            <Menu.Item active={path === location.pathname}>
                 {name}
-            </Button>
+                {Boolean(labelNum) && (
+                    <Label color="red" floating>
+                        {labelNum}
+                    </Label>
+                )}
+            </Menu.Item>
         </Link>
+        // <Link to={path}>
+        //     <Button name={name} active={path === location.pathname}>
+        //         {name}
+        //         <Label color="red" floating>
+        //             22
+        //         </Label>
+        //     </Button>
     );
 };
 

@@ -33,35 +33,40 @@ const Header = () => {
 
     return (
         <StyledHeader>
-            <Menu secondary>
+            <StyledMenu>
                 <LinkButton name={"home"} path={"/"} />
                 <LinkButton name={"issue"} path={"/issue"} />
-                <LinkButton name={"save"} path={"/save"} />
-                <Menu.Menu position="right">
-                    <form onSubmit={handleInputSubmit}>
-                        <Menu.Item>
-                            <Input
-                                action={{ icon: "search" }}
-                                value={search}
-                                onChange={handleInputChange}
-                                placeholder="Search..."
-                            />
-                        </Menu.Item>
-                    </form>
-                    {/*<Menu.Item name="logout" active={activeItemName === "logout"} onClick={handleItemClick} />*/}
-                </Menu.Menu>
-            </Menu>
+                <LinkButton name={"save"} path={"/save"} labelNum={repository.savedRepository.length} />
+            </StyledMenu>
+            <form onSubmit={handleInputSubmit}>
+                <Menu.Item>
+                    <Input
+                        action={{ icon: "search" }}
+                        value={search}
+                        onChange={handleInputChange}
+                        placeholder="Search..."
+                    />
+                </Menu.Item>
+            </form>
         </StyledHeader>
     );
 };
 
 const StyledHeader = styled.header`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     position: fixed;
     top: 0;
     width: 100%;
     padding: 10px;
     background: white;
     border-bottom: 1px solid #e5e5e5;
+    z-index: 1;
+`;
+
+const StyledMenu = styled(Menu)`
+    margin: 10px 0px !important;
 `;
 
 export default Header;

@@ -13,7 +13,7 @@ const Layout = (props: { children: React.ReactNode }) => {
 };
 
 const Main = styled.main`
-    padding-top: 79px;
+    padding-top: 100px;
 `;
 
 export default Layout;

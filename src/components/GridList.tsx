@@ -5,10 +5,26 @@ import { Button, Grid, Icon, Item } from "semantic-ui-react";
 import styled from "styled-components";
 import { getRepositoryIssues, getUsersRepository } from "../api/main";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import { useToast } from "../hooks/useToast";
 
-const GridExampleDividedPhrase = () => {
+interface ColumnDataTypes {
+    name: string;
+    open_issues_count: number;
+    description: string;
+    owner: { login: string };
+    id: number;
+}
+
+interface IGridExampleDividedPhrase {
+    listItem: [];
+    chunkSize: number;
+}
+
+const GridExampleDividedPhrase = ({ listItem, chunkSize = 3 }: IGridExampleDividedPhrase) => {
     const [isLoaded, setIsLoaded] = useState(false);
     const [repository, setRepository] = useRecoilState(repositoryAtom);
+
+    const { fireToast } = useToast();
 
     const arrayChunk = (arr: any, n: number) => {
         if (!Array.isArray(arr)) return [];
@@ -44,46 +60,29 @@ const GridExampleDividedPhrase = () => {
         callback: getMoreRepository,
     });
 
-    const handleGetIssue = async (col: {
-        name: string;
-        full_name: string;
-        open_issues_count: number;
-        stargazers_count: number;
-        language: string;
-        description: string;
-        owner: { login: string };
-    }) => {
+    const handleGetIssue = async (col: ColumnDataTypes) => {
         console.log(col);
         const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
         console.log(issues);
     };
 
-    const handleAddItem = async (col: {
-        name: string;
-        full_name: string;
-        open_issues_count: number;
-        stargazers_count: number;
-        language: string;
-        description: string;
-        owner: { login: string };
-    }) => {
+    const handleAddItem = async (event: React.MouseEvent<HTMLButtonElement>, col: ColumnDataTypes) => {
         console.log(col);
-        const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
-        console.log(issues);
-    };
 
-    const handleMoveLink = async (col: {
-        name: string;
-        full_name: string;
-        open_issues_count: number;
-        stargazers_count: number;
-        language: string;
-        description: string;
-        owner: { login: string };
-    }) => {
-        console.log(col);
-        const issues = await getRepositoryIssues({ owner: col.owner.login, repo: col.name });
-        console.log(issues);
+        let savedRepository: [{ username: string; data: any }] | never[];
+        if (repository.savedRepository.some((v: { data: any }) => v.data.id === col.id)) {
+            savedRepository = repository.savedRepository.filter((v: { data: any }) => v.data.id !== col.id);
+        } else {
+            if (repository.savedRepository.length === 4) {
+                fireToast({ content: "레포지토리는 최대 4개까지만 저장 가능합니다." });
+                return;
+            }
+            savedRepository = [...(repository.savedRepository as []), { username: repository.username, data: col }];
+        }
+
+        console.log(savedRepository);
+        localStorage.setItem("savedRepository", JSON.stringify(savedRepository));
+        setRepository((prev) => ({ ...prev, savedRepository: savedRepository } as any));
     };
 
     useEffect(() => {
@@ -92,56 +91,47 @@ const GridExampleDividedPhrase = () => {
 
     return (
         <Grid columns={3}>
-            {arrayChunk(repository.list, 3).map((row, i) => (
+            {arrayChunk(listItem, chunkSize).map((row, i) => (
                 <React.Fragment key={i + "row"}>
                     <GridRow>
-                        {row.map(
-                            (
-                                col: {
-                                    name: string;
-                                    full_name: string;
-                                    open_issues_count: number;
-                                    stargazers_count: number;
-                                    language: string;
-                                    description: string;
-                                    owner: { login: string };
-                                },
-                                i,
-                            ) => (
-                                <GridCol key={i + "col"} onClick={() => handleGetIssue(col)}>
-                                    <StyledItem>
-                                        {/*<Item.Image size="tiny" src="/images/wireframe/image.png" />*/}
-
-                                        <StyledHeader>
-                                            <Span bold color={col.open_issues_count ? "#F66A3A" : "#8d8d8d"}>
-                                                {col.open_issues_count} issues
-                                            </Span>
-                                            <div>
-                                                <Button
-                                                    icon="add"
-                                                    size={"mini"}
-                                                    color={"blue"}
-                                                    onClick={() => handleAddItem(col)}
-                                                />
-                                                <Button
-                                                    icon="github"
-                                                    size={"mini"}
-                                                    color={"black"}
-                                                    onClick={() => handleMoveLink(col)}
-                                                />
-                                            </div>
-                                        </StyledHeader>
-
-                                        <Span bold>{col.name}</Span>
-                                        <Span fontSize={12} color={"#8d8d8d"}>
-                                            {col.description}
+                        {row.map((col: ColumnDataTypes, i) => (
+                            <GridCol key={i + "col"}>
+                                <StyledItem>
+                                    <StyledHeader>
+                                        <Span bold color={col.open_issues_count ? "#F66A3A" : "#8d8d8d"}>
+                                            {col.open_issues_count} issues
                                         </Span>
-                                    </StyledItem>
-                                </GridCol>
-                            ),
-                        )}
+                                        <div>
+                                            <Button
+                                                icon={
+                                                    repository.savedRepository.some(
+                                                        (v: { data: any }) => v?.data.id === col.id,
+                                                    )
+                                                        ? "minus"
+                                                        : "add"
+                                                }
+                                                size={"mini"}
+                                                color={
+                                                    repository.savedRepository.some(
+                                                        (v: { data: any }) => v?.data.id === col.id,
+                                                    )
+                                                        ? "red"
+                                                        : "blue"
+                                                }
+                                                onClick={(event) => handleAddItem(event, col)}
+                                            />
+                                        </div>
+                                    </StyledHeader>
+
+                                    <Span bold>{col.name}</Span>
+                                    <Span fontSize={12} color={"#8d8d8d"}>
+                                        {col.description}
+                                    </Span>
+                                </StyledItem>
+                            </GridCol>
+                        ))}
                     </GridRow>
-                    {!isLoaded && arrayChunk(repository.list, 3).length - 5 === i && <div ref={setTarget} />}
+                    {!isLoaded && arrayChunk(listItem, chunkSize).length - 5 === i && <div ref={setTarget} />}
                 </React.Fragment>
             ))}
         </Grid>

@@ -19,7 +19,7 @@ export const getUsersRepository = ({ username, page = 1 }: IGetUser): AxiosPromi
         baseURL: "https://api.github.com",
         url: `users/${username}/repos`,
         headers: {
-            Authorization: "Bearer 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",
+            Authorization: "Bearer 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",
         },
         params: {
             page,
@@ -33,7 +33,7 @@ export const getRepositoryIssues = ({ owner, repo }: IGetRepositoryIssues): Axio
         baseURL: "https://api.github.com",
         url: `repos/${owner}/${repo}/issues`,
         headers: {
-            Authorization: "Bearer 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",
+            Authorization: "Bearer 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",
         },
     });
 };
