@@ -6,6 +6,8 @@ export const HeaderBox = styled.header`
     position: fixed;
     top: 0;
     border-bottom: 1px solid ${MAIN_COLOR.LIGHT_GRAY};
+    background: white;
+    z-index: 1;
 `;
 
 export const MainBox = styled.main`

@@ -3,9 +3,10 @@ module.exports = {
     env: {
         browser: true,
         es6: true,
+        node: true,
     },
     parser: "@typescript-eslint/parser",
-    plugins: ["@typescript-eslint"],
+    plugins: ["@typescript-eslint", "react", "react-hooks"],
 
     extends: [
         "eslint:recommended",
@@ -32,5 +33,11 @@ module.exports = {
     },
     rules: {
         // 추가하고 싶은 rule을 더 추가해줍니다.
+        "react-hooks/exhaustive-deps": [
+            "warn",
+            {
+                enableDangerousAutofixThisMayCauseInfiniteLoops: true,
+            },
+        ],
     },
 };
