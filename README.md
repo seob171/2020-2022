@@ -2,7 +2,7 @@
 
 ### 실행방법
 ```
-yarn // package 설치
+npm i // package 설치
 
-yarn dev // localhost:3000 실행
+npm dev // localhost:3000 실행
 ```
