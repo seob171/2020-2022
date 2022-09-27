@@ -9,15 +9,24 @@ import {
     Modal,
     ModalContent,
     ModalOverlay,
+    Stack,
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
+import {
+    ArrowBackIcon,
+    ArrowForwardIcon,
+    AttachmentIcon,
+    EmailIcon,
+    InfoOutlineIcon,
+    SearchIcon,
+} from "@chakra-ui/icons";
 import { useSetRecoilState } from "recoil";
 import { BOX_SHADOW, MAIN_COLOR } from "../../constants/color";
 import { HeaderBox } from "../styledComponents";
 import { searchRepositories } from "../../apis/gitOpenApis";
 import repositoryAtom from "../../recoil/repository";
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const setRepository = useSetRecoilState(repositoryAtom);
@@ -33,17 +42,36 @@ const Header = () => {
         async (e: React.MouseEvent<HTMLFormElement>) => {
             e.preventDefault();
             console.log(repositoryName);
-            const repositories = (await searchRepositories({ name: repositoryName })) as any;
+            const repositories = (await searchRepositories({ name: repositoryName, page: 1 })) as any;
             console.log(repositories);
-            setRepository(repositories.items);
+            setRepository((prev) => ({ ...prev, list: repositories.items, page: 1, name: repositoryName }));
             onClose();
+            setRepositoryName("");
+            window.scroll({ top: 0, left: 0, behavior: "smooth" });
         },
         [onClose, repositoryName, setRepository],
     );
 
     return (
         <HeaderBox>
-            <Box width={"100%"} padding={"12px"} display={"flex"} justifyContent={"center"}>
+            <Box width={"100%"} padding={"12px"} display={"flex"} justifyContent={"space-between"}>
+                <Stack direction="row" spacing={4}>
+                    <Link to={"/"}>
+                        <Button leftIcon={<ArrowBackIcon />} colorScheme="teal" variant="outline">
+                            Home
+                        </Button>
+                    </Link>
+                    <Link to={"/issues"}>
+                        <Button leftIcon={<InfoOutlineIcon />} colorScheme="yellow" variant="solid">
+                            Issues
+                        </Button>
+                    </Link>
+                    <Link to={"/bookmark"}>
+                        <Button leftIcon={<AttachmentIcon />} colorScheme="teal" variant="solid">
+                            Bookmark
+                        </Button>
+                    </Link>
+                </Stack>
                 <Button
                     onClick={onOpen}
                     boxShadow={BOX_SHADOW.MAIN}

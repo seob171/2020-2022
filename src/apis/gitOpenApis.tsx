@@ -1,6 +1,6 @@
 import { AxiosPromise } from "axios";
 import request from "./core/index.";
-import { RepositoryImpl } from "../recoil/repository/atom";
+import { RepositoryListImpl } from "../recoil/repository/atom";
 
 interface SearchRepositoryProps {
     name: string;
@@ -16,19 +16,19 @@ interface listRepositoryIssuesProps {
 
 export type SearchRepositoryPromiseType = {
     total_count: number;
-    items: [RepositoryImpl];
+    items: [RepositoryListImpl];
     incomplete_results: boolean;
 };
 
 const BASE_URL = "https://api.github.com";
 
 // 토큰 관리 필요!
-const token = "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";
+const token = "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";
 
 export const searchRepositories = ({
     name,
     page = 1,
-    per_page = 50,
+    per_page = 40,
 }: SearchRepositoryProps): AxiosPromise<SearchRepositoryPromiseType> => {
     return request({
         baseURL: BASE_URL,
