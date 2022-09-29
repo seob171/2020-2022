@@ -25,7 +25,7 @@ export type SearchRepositoryPromiseType = {
 const BASE_URL = "https://api.github.com";
 
 // 토큰 관리 필요!
-const token = "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";
+const token = "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";
 
 export const searchRepositories = ({
     name,
@@ -50,7 +50,7 @@ export const listRepositoryIssues = ({
     owner,
     repo,
     page = 1,
-    per_page,
+    per_page = 15,
 }: listRepositoryIssuesProps): AxiosPromise<IssuesListImpl[]> => {
     return request({
         baseURL: BASE_URL,

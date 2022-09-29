@@ -1,10 +1,11 @@
-import { Grid, Skeleton } from "@chakra-ui/react";
+import { Skeleton } from "@chakra-ui/react";
 import React, { useCallback, useEffect, useState } from "react";
 import RepositoryItem from "./common/RepositoryItem";
 import { useRecoilState } from "recoil";
 import repositoryAtom from "../recoil/repository";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import { searchRepositories } from "../apis/gitOpenApis";
+import RepeatGridList from "./common/RepeatGridList";
 
 const RepositoryList = () => {
     const [isLoaded, setIsLoaded] = useState(false);
@@ -46,33 +47,28 @@ const RepositoryList = () => {
     }, [repository]);
 
     return (
-        <Grid templateColumns="repeat(4, 1fr)">
-            {repository.list.map((item, index) => (
-                <React.Fragment key={index}>
+        <>
+            <RepeatGridList>
+                {repository.list.map((item, index) => (
                     <RepositoryItem
+                        key={index}
                         full_name={item.full_name}
                         description={item.description}
                         open_issues_count={item.open_issues_count}
                         stargazers_count={item.stargazers_count}
                         id={item.id}
                     />
-                </React.Fragment>
-            ))}
-            {!isLoaded && !isEnd && <div ref={setTarget} />}
-            {isLoaded &&
-                !isEnd &&
-                skeletonArray.map((item) => (
-                    <Skeleton height={170} margin={4} key={item}>
-                        <RepositoryItem
-                            full_name={`${item}`}
-                            description={`${item}`}
-                            open_issues_count={item}
-                            stargazers_count={item}
-                            id={item}
-                        />
-                    </Skeleton>
                 ))}
-        </Grid>
+            </RepeatGridList>
+            {!isLoaded && !isEnd && <div ref={setTarget} />}
+            {isLoaded && !isEnd && (
+                <RepeatGridList>
+                    {skeletonArray.map((item) => (
+                        <Skeleton height={170} margin={4} key={item} />
+                    ))}
+                </RepeatGridList>
+            )}
+        </>
     );
 };
 
