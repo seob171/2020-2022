@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Pagination from "../components/common/Pagination";
 import Layout from "../components/layout/index";
 import { MdFirstPage, MdLastPage, MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
-import { Box, Skeleton, Spinner } from "@chakra-ui/react";
+import { Box, Skeleton } from "@chakra-ui/react";
 import { MAIN_COLOR } from "../constants/color";
 import { useRecoilState } from "recoil";
 import issuesAtom from "../recoil/issues";

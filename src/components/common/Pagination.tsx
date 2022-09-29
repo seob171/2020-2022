@@ -1,5 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { range } from "../../utils/arrayUtils";
 
 interface PaginationImpl {

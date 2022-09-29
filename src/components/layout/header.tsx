@@ -13,14 +13,7 @@ import {
     Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import {
-    ArrowBackIcon,
-    ArrowForwardIcon,
-    AttachmentIcon,
-    EmailIcon,
-    InfoOutlineIcon,
-    SearchIcon,
-} from "@chakra-ui/icons";
+import { ArrowBackIcon, AttachmentIcon, InfoOutlineIcon, SearchIcon } from "@chakra-ui/icons";
 import { useSetRecoilState } from "recoil";
 import { BOX_SHADOW, MAIN_COLOR } from "../../constants/color";
 import { HeaderBox } from "../styledComponents";
@@ -41,9 +34,7 @@ const Header = () => {
     const handleSubmit = useCallback(
         async (e: React.MouseEvent<HTMLFormElement>) => {
             e.preventDefault();
-            console.log(repositoryName);
             const repositories = (await searchRepositories({ name: repositoryName, page: 1 })) as any;
-            console.log(repositories);
             setRepository((prev) => ({ ...prev, list: repositories.items, page: 1, name: repositoryName }));
             onClose();
             setRepositoryName("");

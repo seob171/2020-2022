@@ -24,9 +24,6 @@ export type SearchRepositoryPromiseType = {
 
 const BASE_URL = "https://api.github.com";
 
-// 토큰 관리 필요!
-const token = "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";
-
 export const searchRepositories = ({
     name,
     page = 1,
@@ -35,9 +32,9 @@ export const searchRepositories = ({
     return request({
         baseURL: BASE_URL,
         url: `search/repositories`,
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //     Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        // },
         params: {
             page,
             per_page,
@@ -55,9 +52,9 @@ export const listRepositoryIssues = ({
     return request({
         baseURL: BASE_URL,
         url: `repos/${owner}/${repo}/issues`,
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //     Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+        // },
         params: {
             page,
             per_page,

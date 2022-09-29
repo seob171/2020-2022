@@ -1,4 +1,4 @@
-import { Box, Image } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { IssuesListImpl } from "../../recoil/issues/atom";
 import { MAIN_COLOR } from "../../constants/color";
@@ -35,14 +35,6 @@ const IssueItem = ({ id, html_url, user, title, updated_at, number }: IssuesList
             <Box as={"span"} fontSize={10} color={MAIN_COLOR.DEEP_GRAY}>{`#${number} 이슈가 ${updated_at
                 .replace("T", "")
                 .substring(0, 18)} 에 ${user.login}에 의해 오픈되었습니다.`}</Box>
-            {/*<Box display={"flex"}>*/}
-            {/*    <Image boxSize="2rem" borderRadius="full" src={user.avatar_url} alt="user avatar" mr="12px" />*/}
-            {/*    <Box as="span" ml="2" fontWeight="bold" color={MAIN_COLOR.DARK_GREEN}>*/}
-            {/*        {user.login}*/}
-            {/*    </Box>*/}
-            {/*</Box>*/}
-            {/*<div>{html_url}</div>*/}
-            {/*<div>{id}</div>*/}
         </Box>
     );
 };

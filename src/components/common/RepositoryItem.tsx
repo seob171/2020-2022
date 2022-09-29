@@ -1,5 +1,5 @@
 import { StarIcon } from "@chakra-ui/icons";
-import { Box, Button, GridItem, Icon, TagLabel, TagLeftIcon, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Icon, TagLabel, TagLeftIcon, Text, useToast } from "@chakra-ui/react";
 import React, { useCallback, useMemo } from "react";
 import { RiGitRepositoryFill } from "react-icons/ri";
 import { BsBookmark, BsBookmarkFill, BsPatchExclamation } from "react-icons/bs";
