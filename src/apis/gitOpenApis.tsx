@@ -1,6 +1,7 @@
 import { AxiosPromise } from "axios";
 import request from "./core/index.";
 import { RepositoryListImpl } from "../recoil/repository/atom";
+import { IssuesListImpl } from "../recoil/issues/atom";
 
 interface SearchRepositoryProps {
     name: string;
@@ -12,6 +13,7 @@ interface listRepositoryIssuesProps {
     owner: string;
     repo: string;
     page?: number;
+    per_page?: number;
 }
 
 export type SearchRepositoryPromiseType = {
@@ -23,7 +25,7 @@ export type SearchRepositoryPromiseType = {
 const BASE_URL = "https://api.github.com";
 
 // 토큰 관리 필요!
-const token = "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";
+const token = "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";
 
 export const searchRepositories = ({
     name,
@@ -44,7 +46,12 @@ export const searchRepositories = ({
     });
 };
 
-export const listRepositoryIssues = ({ owner, repo, page = 1 }: listRepositoryIssuesProps): AxiosPromise => {
+export const listRepositoryIssues = ({
+    owner,
+    repo,
+    page = 1,
+    per_page,
+}: listRepositoryIssuesProps): AxiosPromise<IssuesListImpl[]> => {
     return request({
         baseURL: BASE_URL,
         url: `repos/${owner}/${repo}/issues`,
@@ -53,6 +60,7 @@ export const listRepositoryIssues = ({ owner, repo, page = 1 }: listRepositoryIs
         },
         params: {
             page,
+            per_page,
         },
     });
 };

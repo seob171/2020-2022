@@ -5,6 +5,7 @@ export const MAIN_COLOR = {
     DARK_GREEN: "#294A58",
     DEEP_GREEN: "#294A58",
     GREEN: "#294A58",
+    BLUE: "#1F96E3",
 };
 
 export const BOX_SHADOW = {

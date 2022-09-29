@@ -62,7 +62,7 @@ const RepositoryList = () => {
             {isLoaded &&
                 !isEnd &&
                 skeletonArray.map((item) => (
-                    <Skeleton height={150} margin={4} key={item}>
+                    <Skeleton height={170} margin={4} key={item}>
                         <RepositoryItem
                             full_name={`${item}`}
                             description={`${item}`}

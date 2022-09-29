@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
 import { MAIN_COLOR } from "../../constants/color";
 
+export const LayoutBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+`;
+
 export const HeaderBox = styled.header`
     width: 100%;
     position: fixed;
@@ -12,4 +18,5 @@ export const HeaderBox = styled.header`
 
 export const MainBox = styled.main`
     padding-top: 65px;
+    flex: 1;
 `;

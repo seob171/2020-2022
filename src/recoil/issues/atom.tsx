@@ -1,25 +1,23 @@
 import { atom } from "recoil";
 
-// 리스트 issues에 맞게 변경
-export type RepositoryListImpl = {
-    full_name: string;
-    description: string;
-    open_issues_count: number;
-    stargazers_count: number;
+export type IssuesListImpl = {
     id: number;
+    html_url: string;
+    user: { login: string; id: number; avatar_url: string; html_url: string };
 };
 
-export interface RepositoryImpl {
-    list: RepositoryListImpl[];
+export interface IssuesImpl {
+    list: IssuesListImpl[];
     owner: string;
     repositoryName: string;
     page: number;
+    openedPage: number[];
 }
 
 // 페이지리스트, 현재 열람한 페이지, 이슈 owner, 레포지토리 이름
-const repositoryAtom = atom<RepositoryImpl>({
+const issuesAtom = atom<IssuesImpl>({
     key: "issues",
-    default: { list: [], owner: "", repositoryName: "", page: 1 },
+    default: { list: [], openedPage: [], owner: "", repositoryName: "", page: 1 },
 });
 
-export default repositoryAtom;
+export default issuesAtom;
