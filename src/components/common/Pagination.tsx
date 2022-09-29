@@ -1,11 +1,12 @@
 import { Box, Button } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { range } from "../../utils/arrayUtils";
 
 interface PaginationImpl {
     currentPage: number;
     totalItemCount: number;
-    perPage: number;
-    pageRangeDisplayed: number;
+    perPage?: number;
+    pageRangeDisplayed?: number;
     onChange: (page: number) => void;
     firstButton?: any;
     prevButton?: any;
@@ -17,8 +18,8 @@ interface PaginationImpl {
 const Pagination = ({
     currentPage,
     totalItemCount,
-    perPage,
-    pageRangeDisplayed,
+    perPage = 10,
+    pageRangeDisplayed = 10,
     onChange,
     firstButton = "<<",
     prevButton = "<",
@@ -26,42 +27,56 @@ const Pagination = ({
     lastButton = ">>",
     justifyContent = "flex-start",
 }: PaginationImpl) => {
+    const [innerCurrentPage, setInnerCurrentPage] = useState(currentPage);
     const numPages = useMemo(() => Math.ceil(totalItemCount / perPage), [perPage, totalItemCount]);
-    const chapter = useMemo(() => Math.floor(currentPage / pageRangeDisplayed), [currentPage, pageRangeDisplayed]);
+    const chapter = useMemo(
+        () => Math.floor(innerCurrentPage / pageRangeDisplayed),
+        [innerCurrentPage, pageRangeDisplayed],
+    );
 
     const rangeSize = useMemo(() => {
         const lastRangeSize = numPages % pageRangeDisplayed;
-        if (currentPage >= numPages - lastRangeSize) return lastRangeSize;
+        if (innerCurrentPage >= numPages - lastRangeSize) return lastRangeSize;
         else return pageRangeDisplayed;
-    }, [currentPage, numPages, pageRangeDisplayed]);
-
-    function range(size: number, start = 0): number[] {
-        return Array.from({ length: size }, (_, index) => index + start);
-    }
+    }, [innerCurrentPage, numPages, pageRangeDisplayed]);
 
     const pageRange = useMemo(
         () => range(rangeSize, chapter * pageRangeDisplayed),
         [chapter, pageRangeDisplayed, rangeSize],
     );
 
+    const handleChangePage = useCallback(
+        (page: number) => {
+            setInnerCurrentPage(page);
+            onChange(page);
+        },
+        [onChange],
+    );
+
     return (
         <Box display={"flex"} justifyContent={justifyContent}>
-            <PaginationButton onClick={() => onChange(0)} disabled={currentPage === 0}>
+            <PaginationButton onClick={() => handleChangePage(0)} disabled={innerCurrentPage === 0}>
                 {firstButton}
             </PaginationButton>
-            <PaginationButton onClick={() => onChange(currentPage - 1)} disabled={currentPage === 0}>
+            <PaginationButton onClick={() => handleChangePage(innerCurrentPage - 1)} disabled={innerCurrentPage === 0}>
                 {prevButton}
             </PaginationButton>
 
             {pageRange.map((page) => (
-                <PaginationButton key={page} onClick={() => onChange(page)} active={page === currentPage}>
+                <PaginationButton key={page} onClick={() => handleChangePage(page)} active={page === innerCurrentPage}>
                     {page + 1}
                 </PaginationButton>
             ))}
-            <PaginationButton onClick={() => onChange(currentPage + 1)} disabled={currentPage === numPages - 1}>
+            <PaginationButton
+                onClick={() => handleChangePage(innerCurrentPage + 1)}
+                disabled={innerCurrentPage === numPages - 1}
+            >
                 {nextButton}
             </PaginationButton>
-            <PaginationButton onClick={() => onChange(numPages - 1)} disabled={currentPage === numPages - 1}>
+            <PaginationButton
+                onClick={() => handleChangePage(numPages - 1)}
+                disabled={innerCurrentPage === numPages - 1}
+            >
                 {lastButton}
             </PaginationButton>
         </Box>
