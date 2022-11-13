@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 interface FormProps {
     children: React.ReactNode;
-    align: "left" | "center" | "right";
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    align?: "left" | "center" | "right";
+    onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 const StyledForm = styled.form<FormProps>`
@@ -22,4 +22,4 @@ const Form = ({ children, align = "center", onSubmit }: FormProps) => {
     );
 };
 
-export default Form;
+export default memo(Form);

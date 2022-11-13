@@ -24,12 +24,24 @@ module.exports = (env, argv) => {
         resolve: {
             // 번들링 가능한 확장자?
             extensions: [".js", ".jsx", ".ts", ".tsx"],
+            fallback: {
+                url: require.resolve("url"),
+                fs: false,
+                crypto: require.resolve("crypto-browserify"),
+                http: require.resolve("stream-http"),
+                https: require.resolve("https-browserify"),
+                os: require.resolve("os-browserify/browser"),
+                stream: require.resolve("stream-browserify"),
+                assert: false,
+                buffer: false,
+                zlib: false,
+            },
         },
         // loader 설정
         module: {
             rules: [
                 {
-                    test: /\.tsx?$/,
+                    test: /\.(js|mjs|jsx|ts|tsx)$/,
                     use: ["babel-loader", "ts-loader"],
                     exclude: /node_modules/,
                 },

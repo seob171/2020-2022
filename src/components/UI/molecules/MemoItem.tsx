@@ -1,6 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { Date, Title } from "../../../style/Container";
+import { timeFormatter } from "../../../utils/timeFormatter";
 
 const Content = styled.div`
     font-size: 14px;
@@ -19,6 +20,7 @@ const Content = styled.div`
 
 const MemoItemContainer = styled.div`
     width: 320px;
+    min-height: 120px;
     border-radius: 4px;
     border: 1px solid rgb(33, 35, 34);
     cursor: pointer;
@@ -33,18 +35,23 @@ const TitleContainer = styled.div`
     margin-bottom: 8px;
 `;
 
-const MemoItem = () => {
+interface MemoItemProps {
+    title: string;
+    date: string;
+    content: string;
+    onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+}
+
+const MemoItem = ({ onClick, title, date, content }: MemoItemProps) => {
     return (
-        <MemoItemContainer>
+        <MemoItemContainer onClick={onClick}>
             <TitleContainer>
-                <Title>리멤버 웹 개발자</Title>
-                <Date>수정일 2022 11 13</Date>
+                <Title>{title}</Title>
+                <Date>Created at {timeFormatter(date)}</Date>
             </TitleContainer>
-            <Content>
-                주) 드라마앤컴퍼니주) 드라마앤컴퍼니주) 드라마앤컴퍼니주) 드라마앤컴퍼니주) 드라마앤컴퍼니
-            </Content>
+            <Content>{content}</Content>
         </MemoItemContainer>
     );
 };
 
-export default MemoItem;
+export default memo(MemoItem);

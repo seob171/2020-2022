@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, { css } from "styled-components";
 
 interface InputProps {
@@ -7,6 +7,7 @@ interface InputProps {
     margin?: string | number;
     value?: string | number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
     placeholder?: string;
 }
 
@@ -47,16 +48,18 @@ const StyledInput = styled.input<InputProps>`
         `}
 `;
 
-const Input = ({ value, onChange, placeholder, borderRadius = "none", margin, type = "text" }: InputProps) => {
+const Input = ({ value, onChange, placeholder, borderRadius = "none", margin, type = "text", onBlur }: InputProps) => {
     return (
         <StyledInput
+            autoFocus
             value={value}
             placeholder={placeholder}
             onChange={onChange}
             borderRadius={borderRadius}
             margin={margin}
+            onBlur={onBlur}
         />
     );
 };
 
-export default Input;
+export default memo(Input);

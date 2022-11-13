@@ -1,13 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
+import { useRecoilState } from "recoil";
+import { isActive } from "../../../recoil/atoms/memoAtom";
 import { FlexItem } from "../../../style/Container";
 import Notepad from "../molecules/Notepad";
 
 const OpenedMemo = () => {
-    return (
+    const [isActived, setIsActived] = useRecoilState(isActive);
+
+    return isActived ? (
         <FlexItem minWidth={"300px"}>
             <Notepad />
         </FlexItem>
+    ) : (
+        <></>
     );
 };
 
-export default OpenedMemo;
+export default memo(OpenedMemo);

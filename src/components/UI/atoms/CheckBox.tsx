@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 
 interface CheckBoxProps {
@@ -18,4 +18,4 @@ const CheckBox = ({ id, checked, index, onChange }: CheckBoxProps) => {
     return <StyledCheckBox type={"checkbox"} id={id} index={index} checked={checked} onChange={onChange} />;
 };
 
-export default CheckBox;
+export default memo(CheckBox);

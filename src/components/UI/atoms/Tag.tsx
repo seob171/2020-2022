@@ -1,11 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import React, { memo } from "react";
+import styled, { css } from "styled-components";
 
 interface TagProps {
     children: React.ReactChild;
     onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
     width?: "fit-content" | "auto" | "100%";
     background?: string;
+    active?: boolean;
 }
 
 const StyledTag = styled.div<TagProps>`
@@ -20,14 +21,19 @@ const StyledTag = styled.div<TagProps>`
     background: ${(props) => props.background || "rgb(245, 245, 245)"};
     border-radius: 2px;
     width: ${(props) => props.width};
+    ${(props) =>
+        props.active &&
+        css`
+            border: 1px solid black;
+        `}
 `;
 
-const Tag = ({ children, onClick, width = "fit-content", background = "rgb(245, 245, 245)" }: TagProps) => {
+const Tag = ({ children, onClick, width = "fit-content", active, background = "rgb(245, 245, 245)" }: TagProps) => {
     return (
-        <StyledTag onClick={onClick} width={width} background={background}>
+        <StyledTag onClick={onClick} active={active} width={width} background={background}>
             {children}
         </StyledTag>
     );
 };
 
-export default Tag;
+export default memo(Tag);

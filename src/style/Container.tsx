@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface FlexItemProps {
     color?: string;
@@ -10,18 +10,21 @@ interface FlexItemProps {
     justify?: string;
     align?: string;
     width?: string;
+    height?: string;
+    border?: string;
 }
 
 export const FlexItem = styled.div<FlexItemProps>`
     display: flex;
     flex: ${(props) => props.flex || "auto"};
     margin: 4px;
-    height: 100%;
+    height: ${(props) => props.height || "100%"};
     min-width: ${(props) => props.minWidth};
     flex-direction: ${(props) => props.flexDirection};
     justify-content: ${(props) => props.justify};
     align-items: ${(props) => props.align};
     width: ${(props) => props.width};
+    border: ${(props) => props.border};
 `;
 
 export const Date = styled.div`
@@ -36,10 +39,26 @@ export const Date = styled.div`
     text-overflow: ellipsis;
     color: #818e9c;
 `;
-export const Title = styled.div`
+export const Title = styled.div<{ size?: "small" | "medium" | "large" }>`
     max-width: 250px;
     width: fit-content;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: ${(props) => props.size};
+    ${(props) =>
+        props.size === "small" &&
+        css`
+            font-size: 24px;
+        `}
+    ${(props) =>
+        props.size === "medium" &&
+        css`
+            font-size: 32px;
+        `}
+        ${(props) =>
+        props.size === "large" &&
+        css`
+            font-size: 40px;
+        `}
 `;

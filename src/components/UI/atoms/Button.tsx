@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, { css } from "styled-components";
 
 interface ButtonProps {
@@ -6,6 +6,7 @@ interface ButtonProps {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
     children: React.ReactChild | string;
     margin?: string;
+    type?: "button" | "submit";
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -44,12 +45,12 @@ const StyledButton = styled.button<ButtonProps>`
         `};
 `;
 
-const Button = ({ children, onClick, margin, borderRadius }: ButtonProps) => {
+const Button = ({ children, type, onClick, margin, borderRadius }: ButtonProps) => {
     return (
-        <StyledButton margin={margin} onClick={onClick} borderRadius={borderRadius}>
+        <StyledButton type={type} margin={margin} onClick={onClick} borderRadius={borderRadius}>
             {children}
         </StyledButton>
     );
 };
 
-export default Button;
+export default memo(Button);
