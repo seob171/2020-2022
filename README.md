@@ -2,9 +2,11 @@
 드라마앤컴퍼니 면접 사전과제
 
 ## 실행방법
-1. yarn
-2. yarn dev
-
+1. yarn (라이브러리 설치)
+2. yarn dev (localhost 서버 실행)
+3. https://github.com/dramancompany/memoapp-api-v2 (해당 파일 clone 후 실행)
+4. 테스트!
+---
 ## 프로젝트 구조
 ```
 ├── src
@@ -37,7 +39,7 @@
 ├── tsconfig.json                  # ts compile 설정 파일
 └── webpack.config.js              # env에 따라 webpack을 실행시키는 default 설정 파일
 ```
-
+---
 ## 사용한 라이브러리
 ### 환경설정 - webpack, babel, typescript, lint, prettier
 ### 구현에 사용한 라이브러리 - react, axios(API 통신), recoil(상태관리), styled-component(디자인)
@@ -82,7 +84,7 @@
     }
 ```
 
-
+---
 ## 아토믹 디자인
 Atoms
 
@@ -101,7 +103,15 @@ Template & Page
 
 ![CleanShot 2022-11-12 at 13 02 49](https://user-images.githubusercontent.com/103884763/201456214-ff5644f4-e291-4259-8aee-0cda44d6de31.png)
 
-
+---
 ## 실제 전체 화면구성
 
 ![CleanShot 2022-11-14 at 03 17 13](https://user-images.githubusercontent.com/103884763/201537631-abd6d816-f523-401e-a260-e7d15f67f2c1.png)
+
+---
+## 개선 가능한 사항
+
+1. 미구현된 api 동작 (relation api) 처리
+2. 체크박스 기능
+3. lebel, memo 등 이동시 history 저장
+4. 마무리가 부족한 UI
